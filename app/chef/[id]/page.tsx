@@ -77,8 +77,8 @@ export default async function ChefPage({ params }: ChefPageProps) {
               {/* Pricing */}
               <div className="mb-8">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">Starting Price</h2>
-                <p className="text-3xl font-bold text-orange-600">£{chef.rate}</p>
-                <p className="text-sm text-gray-500">per person (minimum 4 people)</p>
+                <p className="text-3xl font-bold text-orange-600">£{chef.hourlyRate}</p>
+                <p className="text-sm text-gray-500">per hour</p>
               </div>
 
               {/* Contact Button */}

@@ -43,7 +43,7 @@ export default function ChefCard({ chef }: ChefCardProps) {
         </div>
 
         {/* Price */}
-        <p className="text-lg font-bold text-orange-600 mb-4">From £{chef.rate} per person</p>
+        <p className="text-lg font-bold text-orange-600 mb-4">From £{chef.hourlyRate} per hour</p>
 
         {/* View Button */}
         <Button asChild className="w-full bg-orange-600 hover:bg-orange-700">
