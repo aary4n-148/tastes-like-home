@@ -12,7 +12,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">Tastes Like Home</h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">Find an Indian home-chef in West London</p>
+          <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">Find an Indian home-chef in London</p>
         </div>
 
         {/* Chef Grid */}
