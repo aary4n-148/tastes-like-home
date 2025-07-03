@@ -5,6 +5,13 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, MessageCircle, Shield } from "lucide-react"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel"
 
 interface ChefPageProps {
   params: Promise<{ id: string }>
@@ -20,6 +27,9 @@ export default async function ChefPage({ params }: ChefPageProps) {
 
   const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
 
+  // Build ordered list of images: profile photo first, then food photos
+  const images = [chef.photo || "/placeholder.svg", ...chef.foodPhotos]
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
       <div className="container mx-auto px-4 py-8">
@@ -31,15 +41,25 @@ export default async function ChefPage({ params }: ChefPageProps) {
 
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="md:flex">
-            {/* Chef Photo */}
-            <div className="md:w-1/2">
-              <Image
-                src={chef.photo || "/placeholder.svg"}
-                alt={chef.name}
-                width={600}
-                height={600}
-                className="w-full h-64 md:h-full object-cover"
-              />
+            {/* Carousel showing chef profile & food photos */}
+            <div className="md:w-1/2 relative">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {images.map((src) => (
+                    <CarouselItem key={src}>
+                      <Image
+                        src={src}
+                        alt={chef.name}
+                        width={600}
+                        height={600}
+                        className="w-full h-64 md:h-full object-cover rounded-none"
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
             </div>
 
             {/* Chef Details */}

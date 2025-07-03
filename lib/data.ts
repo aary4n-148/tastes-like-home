@@ -13,7 +13,7 @@ export const chefs: Chef[] = [
   {
     id: "gurpreet-kaur",
     name: "Gurpreet Kaur",
-    photo: "/chefs/gurpreet-kaur.jpg",   // Unsplash portrait
+    photo: "/chefs/gurpreet-kaur.jpg",   
     foodPhotos: [
       "/food/black-dhal.webp",
       "/food/chana-masala.webp",
