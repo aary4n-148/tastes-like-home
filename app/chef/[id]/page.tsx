@@ -86,12 +86,7 @@ export default async function ChefPage({ params }: ChefPageProps) {
               {/* Bio */}
               <div className="mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">About</h2>
-                <p className="text-gray-600 leading-relaxed">
-                  Passionate home chef specializing in authentic {chef.cuisines.join(", ")} cuisine. I bring traditional
-                  family recipes and fresh ingredients to create memorable dining experiences in the comfort of your
-                  home. Each dish is prepared with love and attention to detail, just like it would be in an Indian
-                  household.
-                </p>
+                <p className="text-gray-600 leading-relaxed whitespace-pre-line">{chef.bio}</p>
               </div>
 
               {/* Pricing */}
