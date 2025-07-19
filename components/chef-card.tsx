@@ -18,8 +18,8 @@ export default function ChefCard({ chef }: ChefCardProps) {
           src={chef.photo || "/placeholder.svg"}
           alt={chef.name}
           width={400}
-          height={300}
-          className="w-full h-48 object-cover"
+          height={400}
+          className="w-full aspect-square object-cover"
         />
         {chef.verified && (
           <Badge className="absolute top-3 right-3 bg-green-600 hover:bg-green-700">
