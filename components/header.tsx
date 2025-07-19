@@ -1,19 +1,41 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { ChefHat } from "lucide-react"
 
 export default function Header() {
   return (
-    <header className="bg-white/80 backdrop-blur-sm border-b border-orange-100 sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-orange-600">
-          Tastes Like Home
-        </Link>
+    <header className="bg-gradient-to-r from-white/95 via-orange-50/95 to-white/95 backdrop-blur-md border-b border-gradient-to-r from-orange-100 via-orange-200 to-orange-100 sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto px-6 py-5">
+        <div className="flex items-center justify-between">
+          {/* Enhanced Logo Section */}
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-full blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative bg-gradient-to-r from-orange-600 to-red-600 p-2 rounded-full">
+                <ChefHat className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+                Tastes Like Home
+              </span>
+              <span className="text-xs text-gray-500 font-medium hidden sm:block">
+                Authentic Indian Cuisine
+              </span>
+            </div>
+          </Link>
 
-        <Button asChild variant="outline" className="border-orange-200 text-orange-700 hover:bg-orange-50">
-          <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer">
-            Become a Chef
-          </a>
-        </Button>
+          {/* Enhanced CTA Button */}
+          <Button 
+            asChild 
+            className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+          >
+            <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+              <ChefHat className="w-4 h-4" />
+              <span>Become a Chef</span>
+            </a>
+          </Button>
+        </div>
       </div>
     </header>
   )
