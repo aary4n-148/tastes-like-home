@@ -30,7 +30,7 @@ export default function Header() {
             asChild 
             className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold px-6 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
           >
-            <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
+            <a href="https://forms.gle/72wNQtKa6P4JGyQS9" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2">
               <ChefHat className="w-4 h-4" />
               <span>Become a Chef</span>
             </a>
