@@ -108,6 +108,16 @@ export default async function ChefPage({ params }: ChefPageProps) {
                   Contact on WhatsApp
                 </a>
               </Button>
+
+              {/* Discrete Terms of Use Link */}
+              <div className="mt-4 text-center">
+                <Link 
+                  href="/terms" 
+                  className="text-xs text-gray-400 hover:text-gray-600 hover:underline transition-colors"
+                >
+                  Terms of Use
+                </Link>
+              </div>
             </div>
           </div>
         </div>
