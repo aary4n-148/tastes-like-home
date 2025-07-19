@@ -20,7 +20,7 @@ export default function Header() {
                 Tastes Like Home
               </span>
               <span className="text-xs text-gray-500 font-medium hidden sm:block">
-                Authentic Indian Cuisine
+                Authentic Indian Home Cooking
               </span>
             </div>
           </Link>
