@@ -21,7 +21,7 @@ export const chefs: Chef[] = [
       "/food/aloo-ghobi.webp",
       "/food/palak-paneer.webp"
     ],
-    cuisines: ["Punjabi Homestyle", "Vegetarian", "Tandoori Rotis"],
+    cuisines: ["Punjabi Homestyle", "Vegetarian", "Rotis"],
     hourlyRate: 14,
     phone: "+447712345601",
     verified: true,
@@ -38,7 +38,7 @@ export const chefs: Chef[] = [
       "/food/chicken-65.webp",
       "/food/chole-bhature.webp"
     ],
-    cuisines: ["Punjabi Non-Veg", "Butter Chicken", "Party Buffets"],
+    cuisines: ["Punjabi Non-Veg", "Butter Chicken", "Party Buffets", "Chaat"],
     hourlyRate: 14,
     phone: "+447712345602",
     verified: true,
@@ -54,7 +54,7 @@ export const chefs: Chef[] = [
       "/food/tandoori-chicken.webp",
       "/food/lamb-curry.webp"
     ],
-    cuisines: ["Punjabi Street-Food", "Chole Bhature", "Chaat"],
+    cuisines: ["Non-Veg", "Tandoori", "Kebab"],
     hourlyRate: 13,
     phone: "+447712345603",
     verified: false,
@@ -69,7 +69,7 @@ export const chefs: Chef[] = [
       "/food/kadhi.webp",
       "/food/thepla.webp"
     ],
-    cuisines: ["Gujarati Thali", "Farsan", "Pure Veg"],
+    cuisines: ["Gujarati", "Pure Veg"],
     hourlyRate: 17,
     phone: "+447712345604",
     verified: true,
@@ -85,7 +85,7 @@ export const chefs: Chef[] = [
       "/food/chicken-curry.webp",
       "/food/rajma.webp"
     ],
-    cuisines: ["Gujarati Jain", "Undhiyu", "Sweets"],
+    cuisines: ["Non-Veg", "Chicken", "Sabzi"],
     hourlyRate: 19,
     phone: "+447712345605",
     verified: false,
@@ -100,7 +100,7 @@ export const chefs: Chef[] = [
       "/food/idli.webp",
       "/food/fish-curry.webp"
     ],
-    cuisines: ["South Indian", "Kerala Fish Curry", "Dosa / Idli"],
+    cuisines: ["South Indian", "Dosa / Idli","Sambar"],
     hourlyRate: 14,
     phone: "+447712345606",
     verified: true,
