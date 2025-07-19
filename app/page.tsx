@@ -10,7 +10,7 @@ export default function HomePage() {
 
       <main className="container mx-auto px-4 py-12">
         {/* Cleaned Up Hero Section */}
-        <div className="text-center mb-16 relative">
+        <div className="text-center mb-16 relative pt-8">
           {/* Background decorative element */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-200/30 to-red-200/30 rounded-full blur-3xl"></div>
