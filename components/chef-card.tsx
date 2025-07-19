@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Shield } from "lucide-react"
+import { Shield, ArrowRight } from "lucide-react"
 import type { Chef } from "@/lib/data"
 
 interface ChefCardProps {
@@ -46,8 +46,13 @@ export default function ChefCard({ chef }: ChefCardProps) {
         <p className="text-lg font-bold text-orange-600 mb-4">From £{chef.hourlyRate} per hour</p>
 
         {/* View Button */}
-        <Button asChild className="w-full bg-orange-600 hover:bg-orange-700">
-          <Link href={`/chef/${chef.id}`}>View Chef</Link>
+        <Button asChild className="w-full group bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-200 font-semibold text-white border-0 h-12">
+          <Link href={`/chef/${chef.id}`}>
+            <span className="flex items-center justify-center gap-2">
+              View Chef Profile
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </span>
+          </Link>
         </Button>
       </div>
     </div>
