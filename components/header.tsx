@@ -4,7 +4,7 @@ import { ChefHat } from "lucide-react"
 
 export default function Header() {
   return (
-    <header className="bg-gradient-to-r from-white/95 via-orange-50/95 to-white/95 backdrop-blur-md border-b border-gradient-to-r from-orange-100 via-orange-200 to-orange-100 sticky top-0 z-50 shadow-sm">
+    <header className="bg-white/95 backdrop-blur-lg border-b border-gray-100 sticky top-0 z-50 shadow-lg shadow-orange-100/50">
       <div className="container mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
           {/* Enhanced Logo Section */}
