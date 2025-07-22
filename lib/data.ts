@@ -14,7 +14,7 @@ export const chefs: Chef[] = [
   {
     id: "gurpreet-kaur",
     name: "Gurpreet Kaur",
-    photo: "/chefs/gurpreet-kaur.jpg",   
+    photo: "/chefs/gurpreet-kaur.png",   
     foodPhotos: [
       "/food/black-dhal.webp",
       "/food/chana-masala.webp",
@@ -47,7 +47,7 @@ export const chefs: Chef[] = [
   {
     id: "manpreet-bains",
     name: "Manpreet Bains",
-    photo: "/chefs/manpreet-bains.jpg",
+    photo: "/chefs/manpreet-bains.png",
     foodPhotos: [
       "/food/paneer-tikka.webp",
       "/food/shami-kebab.webp",
@@ -78,7 +78,7 @@ export const chefs: Chef[] = [
   {
     id: "kishan-shah",
     name: "Kishan Shah",
-    photo: "/chefs/kishan-shah.jpg",
+    photo: "/chefs/kishan-shah.png",
     foodPhotos: [
       "/food/chilli-chicken.webp",
       "/food/dhal.webp",
@@ -94,7 +94,7 @@ export const chefs: Chef[] = [
   {
     id: "anita-nair",
     name: "Anita Nair",
-    photo: "/chefs/anita-nair.jpg",
+    photo: "/chefs/anita-nair.png",
     foodPhotos: [
       "/food/dosa.webp",
       "/food/idli.webp",
