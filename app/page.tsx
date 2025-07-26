@@ -17,6 +17,20 @@ interface Chef {
 }
 
 export default async function HomePage() {
+  // Check if environment variables are available (prevents build failures)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1 container mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold text-center mb-2">Tastes Like Home</h1>
+          <p className="text-xl text-center mb-8">Environment variables not configured. Please set up Supabase environment variables.</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+  
   // Fetch chef data from Supabase database
   const supabase = await createSupabaseServerClient()
   

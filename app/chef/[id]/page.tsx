@@ -20,6 +20,16 @@ interface ChefPageProps {
 export default async function ChefPage({ params }: ChefPageProps) {
   const { id } = await params
   
+  // Check if environment variables are available (prevents build failures)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-4">Chef Profile</h1>
+        <p className="text-red-600">Environment variables not configured. Please set up Supabase environment variables.</p>
+      </div>
+    )
+  }
+  
   // Fetch chef data from Supabase database
   const supabase = await createSupabaseServerClient()
   

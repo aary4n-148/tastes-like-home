@@ -4,6 +4,16 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 
 export default async function AdminPage() {
+  // Check if environment variables are available (prevents build failures)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return (
+      <div className="container mx-auto py-8">
+        <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
+        <p className="text-red-600">Environment variables not configured. Please set up Supabase environment variables in Vercel.</p>
+      </div>
+    )
+  }
+  
   // Use admin client to bypass RLS and see all chefs
   const supabase = createSupabaseAdminClient()
   
