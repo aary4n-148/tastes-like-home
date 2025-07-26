@@ -1,4 +1,4 @@
-import { chefs } from "@/lib/data"
+import { createSupabaseServerClient } from "@/lib/supabase-server"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -19,16 +19,51 @@ interface ChefPageProps {
 
 export default async function ChefPage({ params }: ChefPageProps) {
   const { id } = await params
-  const chef = chefs.find((c) => c.id === id)
+  
+  // Fetch chef data from Supabase database
+  const supabase = await createSupabaseServerClient()
+  
+  const { data: chefData, error } = await supabase
+    .from('chefs')
+    .select(`
+      id,
+      name,
+      bio,
+      phone,
+      hourly_rate,
+      verified,
+      photo_url,
+      chef_cuisines(cuisine),
+      food_photos(photo_url, display_order)
+    `)
+    .eq('id', id)
+    .eq('verified', true) // Only show verified chefs
+    .single()
 
-  if (!chef) {
+  if (error || !chefData) {
+    console.error('Error fetching chef:', error)
     notFound()
+  }
+
+  // Transform database data to match expected format
+  const chef = {
+    id: chefData.id,
+    name: chefData.name,
+    photo: chefData.photo_url || '/placeholder.svg',
+    foodPhotos: chefData.food_photos
+      ?.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+      ?.map(p => p.photo_url) || [],
+    cuisines: chefData.chef_cuisines?.map(c => c.cuisine) || [],
+    hourlyRate: chefData.hourly_rate || 0,
+    phone: chefData.phone || '',
+    verified: chefData.verified,
+    bio: chefData.bio || ''
   }
 
   const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
 
   // Build ordered list of images: profile photo first, then food photos
-  const images = [chef.photo || "/placeholder.svg", ...chef.foodPhotos]
+  const images = [chef.photo, ...chef.foodPhotos]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50">
