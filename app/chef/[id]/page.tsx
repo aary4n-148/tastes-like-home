@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, MessageCircle, Shield } from "lucide-react"
+import { ArrowLeft, MessageCircle, Shield, MapPin } from "lucide-react"
 import {
   Carousel,
   CarouselContent,
@@ -43,6 +43,8 @@ export default async function ChefPage({ params }: ChefPageProps) {
       hourly_rate,
       verified,
       photo_url,
+      location_label,
+      location,
       chef_cuisines(cuisine),
       food_photos(photo_url, display_order)
     `)
@@ -67,7 +69,10 @@ export default async function ChefPage({ params }: ChefPageProps) {
     hourlyRate: chefData.hourly_rate || 0,
     phone: chefData.phone || '',
     verified: chefData.verified,
-    bio: chefData.bio || ''
+    bio: chefData.bio || '',
+    location: chefData.location_label || undefined,
+    latitude: undefined,
+    longitude: undefined
   }
 
   const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
@@ -118,6 +123,14 @@ export default async function ChefPage({ params }: ChefPageProps) {
                   </Badge>
                 )}
               </div>
+
+              {/* Location */}
+              {chef.location && (
+                <div className="flex items-center gap-2 mb-4 text-gray-600">
+                  <MapPin className="w-5 h-5" />
+                  <span className="text-lg">{chef.location}</span>
+                </div>
+              )}
 
               {/* Cuisines */}
               <div className="flex flex-wrap gap-2 mb-6">

@@ -43,6 +43,8 @@ export default async function HomePage() {
       hourly_rate,
       verified,
       photo_url,
+      location_label,
+      location,
       chef_cuisines(cuisine),
       food_photos(photo_url)
     `)
@@ -64,7 +66,11 @@ export default async function HomePage() {
       hourlyRate: chef.hourly_rate || 0,
       phone: '', // Don't expose phone on homepage for privacy
       verified: chef.verified,
-      bio: chef.bio || ''
+      bio: chef.bio || '',
+      location: chef.location_label || undefined,
+      // Note: coordinates will be extracted later if needed for proximity features
+      latitude: undefined,
+      longitude: undefined
     })) || []
   }
 
