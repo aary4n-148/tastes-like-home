@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Shield, ArrowRight } from "lucide-react"
+import { Shield, ArrowRight, MapPin } from "lucide-react"
 import type { Chef } from "@/lib/data"
 
 interface ChefCardProps {
@@ -32,6 +32,14 @@ export default function ChefCard({ chef }: ChefCardProps) {
       {/* Card Content */}
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">{chef.name}</h3>
+
+        {/* Location */}
+        {chef.location && (
+          <div className="flex items-center gap-1 mb-3 text-gray-600">
+            <MapPin className="w-4 h-4" />
+            <span className="text-sm">{chef.location}</span>
+          </div>
+        )}
 
         {/* Cuisines */}
         <div className="flex flex-wrap gap-1 mb-3">

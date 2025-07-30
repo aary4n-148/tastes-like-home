@@ -8,6 +8,10 @@ export interface Chef {
   phone: string
   verified: boolean
   bio: string
+  // Location fields - optional since they might not be set
+  location?: string
+  latitude?: number
+  longitude?: number
 }
 
 export const chefs: Chef[] = [
