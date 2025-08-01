@@ -51,27 +51,43 @@ export default async function HomePage() {
     .eq('verified', true)
     .order('created_at', { ascending: false })
 
+  // Fetch rating statistics for all chefs
+  const { data: ratingStatsData } = await supabase
+    .from('chef_rating_stats')
+    .select('chef_id, review_count, avg_rating')
+
+  // Create a map of chef ratings for quick lookup
+  const ratingsMap = new Map(
+    ratingStatsData?.map(stats => [stats.chef_id, stats]) || []
+  )
+
   if (error) {
     console.error('Error fetching chefs:', error)
     // Fallback to empty array if database fails
     var chefs: Chef[] = []
   } else {
     // Transform database data to match our existing Chef interface
-    var chefs: Chef[] = chefsData?.map(chef => ({
-      id: chef.id,
-      name: chef.name,
-      photo: chef.photo_url || '/placeholder.svg',
-      foodPhotos: chef.food_photos?.map(p => p.photo_url) || [],
-      cuisines: chef.chef_cuisines?.map(c => c.cuisine) || [],
-      hourlyRate: chef.hourly_rate || 0,
-      phone: '', // Don't expose phone on homepage for privacy
-      verified: chef.verified,
-      bio: chef.bio || '',
-      location: chef.location_label || undefined,
-      // Note: coordinates will be extracted later if needed for proximity features
-      latitude: undefined,
-      longitude: undefined
-    })) || []
+    var chefs: Chef[] = chefsData?.map(chef => {
+      const ratings = ratingsMap.get(chef.id)
+      return {
+        id: chef.id,
+        name: chef.name,
+        photo: chef.photo_url || '/placeholder.svg',
+        foodPhotos: chef.food_photos?.map(p => p.photo_url) || [],
+        cuisines: chef.chef_cuisines?.map(c => c.cuisine) || [],
+        hourlyRate: chef.hourly_rate || 0,
+        phone: '', // Don't expose phone on homepage for privacy
+        verified: chef.verified,
+        bio: chef.bio || '',
+        location: chef.location_label || undefined,
+        // Note: coordinates will be extracted later if needed for proximity features
+        latitude: undefined,
+        longitude: undefined,
+        // Add rating data from materialized view
+        avgRating: ratings?.avg_rating || undefined,
+        reviewCount: ratings?.review_count || undefined
+      }
+    }) || []
   }
 
   return (

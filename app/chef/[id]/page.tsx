@@ -12,6 +12,8 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel"
+import ReviewForm from "@/components/review-form"
+import ReviewList, { ReviewSummary } from "@/components/review-list"
 
 interface ChefPageProps {
   params: Promise<{ id: string }>
@@ -57,6 +59,23 @@ export default async function ChefPage({ params }: ChefPageProps) {
     notFound()
   }
 
+  // Fetch reviews for this chef
+  const { data: reviewsData } = await supabase
+    .from('reviews')
+    .select('id, chef_id, rating, comment, reviewer_name, status, published_at, verified_at, created_at')
+    .eq('chef_id', id)
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+
+  const reviews = reviewsData || []
+
+  // Fetch rating statistics from materialized view
+  const { data: ratingStats } = await supabase
+    .from('chef_rating_stats')
+    .select('review_count, avg_rating')
+    .eq('chef_id', id)
+    .single()
+
   // Transform database data to match expected format
   const chef = {
     id: chefData.id,
@@ -72,7 +91,10 @@ export default async function ChefPage({ params }: ChefPageProps) {
     bio: chefData.bio || '',
     location: chefData.location_label || undefined,
     latitude: undefined,
-    longitude: undefined
+    longitude: undefined,
+    // Add rating data from materialized view
+    avgRating: ratingStats?.avg_rating || undefined,
+    reviewCount: ratingStats?.review_count || undefined
   }
 
   const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
@@ -178,6 +200,24 @@ export default async function ChefPage({ params }: ChefPageProps) {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="bg-white rounded-xl shadow-md p-6 mt-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Reviews</h2>
+          
+          {/* Show rating summary if reviews exist */}
+          {chef.avgRating && chef.reviewCount && (
+            <ReviewSummary avgRating={chef.avgRating} reviewCount={chef.reviewCount} />
+          )}
+          
+          {/* Review Form */}
+          <div className="mb-8">
+            <ReviewForm chefId={chef.id} chefName={chef.name} />
+          </div>
+          
+          {/* Reviews List */}
+          <ReviewList reviews={reviews} />
         </div>
       </div>
     </div>

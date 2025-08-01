@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Shield, ArrowRight, MapPin } from "lucide-react"
+import { Shield, ArrowRight, MapPin, Star } from "lucide-react"
 import type { Chef } from "@/lib/data"
 
 interface ChefCardProps {
@@ -32,6 +32,21 @@ export default function ChefCard({ chef }: ChefCardProps) {
       {/* Card Content */}
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">{chef.name}</h3>
+
+        {/* Rating Display */}
+        {chef.avgRating && chef.reviewCount && (
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 fill-orange-400 text-orange-400" />
+              <span className="font-semibold text-gray-900">
+                {chef.avgRating.toFixed(1)}
+              </span>
+            </div>
+            <span className="text-sm text-gray-600">
+              ({chef.reviewCount} review{chef.reviewCount !== 1 ? 's' : ''})
+            </span>
+          </div>
+        )}
 
         {/* Location */}
         {chef.location && (
