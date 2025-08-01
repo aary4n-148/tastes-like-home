@@ -13,8 +13,12 @@ export async function sendReviewVerificationEmail(
   verificationUrl: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await resend.emails.send({
-      from: 'Tastes Like Home <reviews@tasteslikehome.co.uk>',
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY environment variable is not set')
+    }
+    
+    const result = await resend.emails.send({
+      from: 'Tastes Like Home <onboarding@resend.dev>',
       to: email,
       subject: `Confirm your review for ${chefName}`,
       html: createVerificationEmailHTML(chefName, verificationUrl)
