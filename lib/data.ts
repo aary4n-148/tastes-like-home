@@ -12,6 +12,21 @@ export interface Chef {
   location?: string
   latitude?: number
   longitude?: number
+  // Review fields - populated from database queries
+  avgRating?: number
+  reviewCount?: number
+}
+
+export interface Review {
+  id: string
+  chef_id: string
+  rating: number
+  comment: string | null
+  reviewer_name: string | null
+  status: 'awaiting_email' | 'awaiting_moderation' | 'published' | 'spam'
+  published_at: string
+  verified_at: string | null
+  created_at: string
 }
 
 export const chefs: Chef[] = [
