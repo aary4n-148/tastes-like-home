@@ -99,13 +99,20 @@ export async function submitReview(
     const { data: review, error: insertError } = await supabase
       .from('reviews')
       .insert(reviewData)
-      .select('id, verification_token')
+      .select('id')
       .single()
     
     if (insertError) {
       console.error('Error creating review:', insertError)
       return { success: false, error: 'Failed to create review. Please try again.' }
     }
+
+    // === STORE VERIFICATION TOKEN ===
+    const verificationToken = createSignedToken(review.id, email)
+    await supabase
+      .from('reviews')
+      .update({ verification_token: verificationToken })
+      .eq('id', review.id)
 
     // === LOG REVIEW CREATION ===
     await supabase
@@ -119,7 +126,6 @@ export async function submitReview(
       })
 
     // === SEND VERIFICATION EMAIL ===
-    const verificationToken = createSignedToken(review.id, email)
     const verificationUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/api/verify-review?token=${verificationToken}`
     
     const emailResult = await sendReviewVerificationEmail(email, chef.name, verificationUrl)
