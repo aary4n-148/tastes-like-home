@@ -24,14 +24,6 @@ export async function submitReview(
   email: string,
   securityToken: string // Simplified parameter - no longer used for Turnstile
 ): Promise<SubmitReviewResult> {
-  console.log('🔍 Starting review submission for chef:', chefId, 'email:', email)
-  
-  // Test environment variables first
-  if (!process.env.REVIEW_VERIFICATION_SECRET) {
-    console.error('🔍 Missing REVIEW_VERIFICATION_SECRET')
-    return { success: false, error: 'Server configuration error - missing verification secret' }
-  }
-  
   try {
     // === INPUT VALIDATION ===
     if (!rating || rating < 1 || rating > 5) {
@@ -77,7 +69,7 @@ export async function submitReview(
       .eq('ip_hash', ipHash)
       .gte('created_at', oneHourAgo)
     
-    if (ipSubmissions && ipSubmissions >= 10) { // Temporarily increased for testing
+    if (ipSubmissions && ipSubmissions >= 3) {
       return { success: false, error: 'Too many reviews from your location. Please try again later.' }
     }
 
@@ -151,25 +143,6 @@ export async function submitReview(
 
   } catch (error) {
     console.error('Review submission error:', error)
-    
-    // Log more details about the error
-    if (error instanceof Error) {
-      console.error('Error name:', error.name)
-      console.error('Error message:', error.message)
-      console.error('Error stack:', error.stack)
-      
-      // Check for specific error types
-      if (error.message.includes('REVIEW_VERIFICATION_SECRET')) {
-        return { success: false, error: 'Server configuration error - missing verification secret' }
-      }
-      if (error.message.includes('database') || error.message.includes('connection')) {
-        return { success: false, error: 'Database connection error' }
-      }
-      if (error.message.includes('rate limit') || error.message.includes('too many')) {
-        return { success: false, error: 'Rate limit exceeded - please try again later' }
-      }
-    }
-    
     return { success: false, error: 'Something went wrong. Please try again.' }
   }
 } 
