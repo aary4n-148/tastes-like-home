@@ -1,5 +1,18 @@
 # Cloudflare Turnstile Configuration Guide
 
+## 🚨 **TEMPORARILY DISABLED - TO BE ADDED LATER**
+
+**DECISION:** Turnstile integration has been temporarily disabled to simplify the review system for initial deployment. The review system works perfectly with existing security layers (email verification, rate limiting, duplicate prevention).
+
+**PLAN:** Turnstile will be re-enabled when:
+- Site traffic increases significantly (100+ reviews per day)
+- Bot submissions become a problem
+- Enterprise-grade security is needed for scaling
+
+**CURRENT STATUS:** Review system is production-ready without Turnstile.
+
+---
+
 ## ✅ Current Status (After Today's Updates)
 
 **COMPLETED TODAY:**
@@ -17,7 +30,7 @@
 
 ### **CRITICAL: Configure Cloudflare Domains**
 
-**This is the ONLY remaining step to make Turnstile work properly.**
+**This is the ONLY remaining step to make Turnstile work properly.**¬
 
 #### **Step 1: Cloudflare Dashboard Access**
 1. **Go to:** https://dash.cloudflare.com

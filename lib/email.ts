@@ -13,12 +13,23 @@ export async function sendReviewVerificationEmail(
   verificationUrl: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    // === TEST MODE: Bypass email sending in development ===
+    if (process.env.REVIEW_TEST_MODE === 'true') {
+      console.log('🧪 TEST MODE: Email would be sent to:', email)
+      console.log('🧪 TEST MODE: Verification URL:', verificationUrl)
+      console.log('🧪 TEST MODE: Chef Name:', chefName)
+      
+      // In test mode, we simulate successful email sending
+      // The verification URL will still work when accessed directly
+      return { success: true }
+    }
+
     if (!process.env.RESEND_API_KEY) {
       throw new Error('RESEND_API_KEY environment variable is not set')
     }
     
     const result = await resend.emails.send({
-      from: 'Tastes Like Home <onboarding@resend.dev>',
+      from: 'Tastes Like Home <noreply@tastes-like-home.com>',
       to: email,
       subject: `Confirm your review for ${chefName}`,
       html: createVerificationEmailHTML(chefName, verificationUrl)

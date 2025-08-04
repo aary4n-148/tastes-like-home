@@ -1,23 +1,12 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import { Star, X, Shield, AlertTriangle } from 'lucide-react'
+import { Star, X, Shield, TestTube } from 'lucide-react'
 import { submitReview } from '@/app/reviews/actions'
 import { toast } from 'sonner'
-
-declare global {
-  interface Window {
-    turnstile: {
-      render: (container: string, options: any) => string
-      reset: (widgetId: string) => void
-      getResponse: (widgetId: string) => string
-      ready: (callback: () => void) => void
-    }
-  }
-}
 
 interface ReviewFormProps {
   chefId: string
@@ -30,89 +19,6 @@ export default function ReviewForm({ chefId, chefName }: ReviewFormProps) {
   const [comment, setComment] = useState('')
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
-  // Turnstile state
-  const [turnstileError, setTurnstileError] = useState(false)
-  const [turnstileStatus, setTurnstileStatus] = useState<'loading' | 'ready' | 'error' | 'disabled'>('loading')
-  const turnstileWidgetId = useRef<string | null>(null)
-
-  useEffect(() => {
-    if (isOpen) {
-      initializeTurnstile()
-    }
-  }, [isOpen])
-
-  const initializeTurnstile = () => {
-    // If no site key configured, disable Turnstile
-    if (!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
-      setTurnstileStatus('disabled')
-      return
-    }
-
-    // Check if turnstile is already available
-    if (window.turnstile) {
-      renderTurnstile()
-      return
-    }
-
-    // Use turnstile.ready() for proper initialization timing
-    const checkTurnstileReady = () => {
-      if (window.turnstile && window.turnstile.ready) {
-        window.turnstile.ready(() => {
-          renderTurnstile()
-        })
-      } else if (window.turnstile) {
-        // Fallback if ready() not available but turnstile is
-        renderTurnstile()
-      } else {
-        // Turnstile not loaded yet, retry
-        setTimeout(checkTurnstileReady, 100)
-      }
-    }
-
-    checkTurnstileReady()
-  }
-
-  const renderTurnstile = () => {
-    if (!window.turnstile || !process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) {
-      setTurnstileStatus('error')
-      return
-    }
-
-    try {
-      const container = document.getElementById('turnstile-container')
-      if (container && !turnstileWidgetId.current) {
-        turnstileWidgetId.current = window.turnstile.render('#turnstile-container', {
-          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-          theme: 'light',
-          size: 'normal',
-          callback: () => {
-            setTurnstileStatus('ready')
-          },
-          'error-callback': () => {
-            console.warn('Turnstile widget error - continuing without it')
-            setTurnstileStatus('error')
-            setTurnstileError(true)
-          },
-          'expired-callback': () => {
-            console.warn('Turnstile token expired - resetting widget')
-            setTurnstileStatus('error')
-            setTurnstileError(true)
-          },
-          'timeout-callback': () => {
-            console.warn('Turnstile challenge timeout - resetting widget')
-            setTurnstileStatus('error')
-            setTurnstileError(true)
-          }
-        })
-        setTurnstileStatus('ready')
-      }
-    } catch (error) {
-      console.warn('Failed to render Turnstile widget - continuing without it:', error)
-      setTurnstileStatus('error')
-      setTurnstileError(true)
-    }
-  }
 
   const handleOpenForm = () => {
     setIsOpen(true)
@@ -123,58 +29,18 @@ export default function ReviewForm({ chefId, chefName }: ReviewFormProps) {
     setRating(0)
     setComment('')
     setEmail('')
-    setTurnstileStatus('loading')
-    setTurnstileError(false)
-    
-    // Clean up Turnstile widget
-    if (turnstileWidgetId.current && window.turnstile) {
-      try {
-        window.turnstile.reset(turnstileWidgetId.current)
-      } catch (error) {
-        // Ignore cleanup errors
-      }
-      turnstileWidgetId.current = null
-    }
   }
 
   const validateForm = () => {
-    if (rating === 0) {
-      toast.error('Please select a rating')
+    if (!rating || rating < 1 || rating > 5) {
+      toast.error('Please select a rating from 1-5 stars')
       return false
     }
-    if (!email.trim()) {
-      toast.error('Please enter your email')
-      return false
-    }
-    if (!/\S+@\S+\.\S+/.test(email)) {
+    if (!email || !email.includes('@')) {
       toast.error('Please enter a valid email address')
       return false
     }
     return true
-  }
-
-  const getTurnstileToken = () => {
-    // If Turnstile is disabled or has errors, return fallback token
-    if (turnstileStatus === 'disabled') {
-      return 'turnstile-disabled'
-    }
-    if (turnstileStatus === 'error' || turnstileError) {
-      return 'turnstile-fallback'
-    }
-    
-    // Try to get real token
-    if (window.turnstile && turnstileWidgetId.current) {
-      try {
-        const token = window.turnstile.getResponse(turnstileWidgetId.current)
-        if (token) {
-          return token
-        }
-      } catch (error) {
-        console.warn('Failed to get Turnstile token - using fallback')
-      }
-    }
-    
-    return 'turnstile-fallback'
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -185,45 +51,27 @@ export default function ReviewForm({ chefId, chefName }: ReviewFormProps) {
     setIsSubmitting(true)
     
     try {
-      const turnstileToken = getTurnstileToken()
-      
-      const result = await submitReview(chefId, rating, comment, email, turnstileToken)
+      // Pass a simple token since Turnstile is disabled
+      const result = await submitReview(chefId, rating, comment, email, 'security-disabled')
       
       if (result.success) {
-        toast.success(result.message || 'Review submitted successfully! Check your email to verify.')
+        // Check if we're in test mode
+        const isTestMode = process.env.NODE_ENV === 'development' && process.env.REVIEW_TEST_MODE === 'true'
+        
+        if (isTestMode) {
+          toast.success('Review submitted! Check browser console for verification URL.')
+        } else {
+          toast.success(result.message || 'Review submitted successfully! Check your email to verify.')
+        }
         handleCloseForm()
       } else {
         toast.error(result.error || 'Failed to submit review')
-        
-        // Reset Turnstile on error for retry
-        if (turnstileWidgetId.current && window.turnstile && turnstileStatus === 'ready') {
-          try {
-            window.turnstile.reset(turnstileWidgetId.current)
-          } catch (error) {
-            // Ignore reset errors
-          }
-        }
       }
     } catch (error) {
       toast.error('Something went wrong. Please try again.')
       console.error('Review submission error:', error)
     } finally {
       setIsSubmitting(false)
-    }
-  }
-
-  const getSecurityStatus = () => {
-    switch (turnstileStatus) {
-      case 'ready':
-        return { icon: Shield, text: 'Security verified', color: 'text-green-600' }
-      case 'loading':
-        return { icon: Shield, text: 'Loading security check...', color: 'text-blue-600' }
-      case 'error':
-        return { icon: AlertTriangle, text: 'Security check unavailable', color: 'text-amber-600' }
-      case 'disabled':
-        return { icon: AlertTriangle, text: 'Security check disabled', color: 'text-gray-600' }
-      default:
-        return { icon: Shield, text: 'Loading...', color: 'text-gray-600' }
     }
   }
 
@@ -235,8 +83,8 @@ export default function ReviewForm({ chefId, chefName }: ReviewFormProps) {
     )
   }
 
-  const securityStatus = getSecurityStatus()
-  const SecurityIcon = securityStatus.icon
+  // Check if we're in test mode
+  const isTestMode = process.env.NODE_ENV === 'development' && process.env.REVIEW_TEST_MODE === 'true'
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -247,6 +95,19 @@ export default function ReviewForm({ chefId, chefName }: ReviewFormProps) {
             <X className="h-4 w-4" />
           </Button>
         </div>
+        
+        {/* Test Mode Indicator */}
+        {isTestMode && (
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center gap-2 text-blue-700">
+              <TestTube className="h-4 w-4" />
+              <span className="text-sm font-medium">Test Mode Active</span>
+            </div>
+            <p className="text-xs text-blue-600 mt-1">
+              Emails are simulated. Check browser console for verification URL.
+            </p>
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Rating */}
@@ -298,20 +159,8 @@ export default function ReviewForm({ chefId, chefName }: ReviewFormProps) {
           
           {/* Security Status */}
           <div className="flex items-center space-x-2 text-sm">
-            <SecurityIcon className={`h-4 w-4 ${securityStatus.color}`} />
-            <span className={securityStatus.color}>{securityStatus.text}</span>
-          </div>
-          
-          {/* Turnstile Container */}
-          <div id="turnstile-container" className="min-h-[65px] flex items-center justify-center">
-            {turnstileStatus === 'loading' && (
-              <div className="text-sm text-gray-500">Loading security verification...</div>
-            )}
-            {(turnstileStatus === 'error' || turnstileStatus === 'disabled') && (
-              <div className="text-xs text-amber-600 bg-amber-50 p-2 rounded border">
-                Security verification unavailable - form will still work
-              </div>
-            )}
+            <Shield className="h-4 w-4 text-green-600" />
+            <span className="text-green-600">Email verification required</span>
           </div>
           
           {/* Submit */}
