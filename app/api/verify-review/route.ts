@@ -14,8 +14,11 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const token = searchParams.get('token')
   
+  console.log('🔍 Verification attempt with token:', token ? token.substring(0, 20) + '...' : 'null')
+  
   // Basic token validation
   if (!token) {
+    console.log('🔍 No token provided')
     return NextResponse.redirect(new URL('/?error=missing-token', request.url))
   }
   
@@ -23,6 +26,7 @@ export async function GET(request: NextRequest) {
     const supabase = createSupabaseAdminClient()
     
     // Find review by verification token
+    console.log('🔍 Searching for review with token in database...')
     const { data: review, error: fetchError } = await supabase
       .from('reviews')
       .select('id, chef_id, status, verification_expires_at')
@@ -30,9 +34,11 @@ export async function GET(request: NextRequest) {
       .single()
     
     if (fetchError || !review) {
-      console.error('Review not found for token:', token, fetchError)
+      console.error('🔍 Review not found for token:', token ? token.substring(0, 20) + '...' : 'null', fetchError)
       return NextResponse.redirect(new URL('/?error=invalid-token', request.url))
     }
+    
+    console.log('🔍 Found review:', review.id, 'status:', review.status, 'chef_id:', review.chef_id)
     
     // Check if review is in the correct state for verification
     if (review.status !== 'awaiting_email') {
@@ -61,6 +67,7 @@ export async function GET(request: NextRequest) {
     }
     
     // === VERIFY AND PUBLISH REVIEW ===
+    console.log('🔍 Updating review status to published...')
     const { error: updateError } = await supabase
       .from('reviews')
       .update({ 
@@ -71,9 +78,11 @@ export async function GET(request: NextRequest) {
       .eq('id', review.id)
     
     if (updateError) {
-      console.error('Error updating review status:', updateError)
+      console.error('🔍 Error updating review status:', updateError)
       return NextResponse.redirect(new URL(`/chef/${review.chef_id}?error=verification-failed`, request.url))
     }
+    
+    console.log('🔍 Review status updated successfully')
     
     // === LOG SUCCESSFUL VERIFICATION ===
     await supabase
@@ -88,13 +97,22 @@ export async function GET(request: NextRequest) {
     
     // === REFRESH MATERIALIZED VIEW ===
     // This ensures rating statistics are updated immediately
-    await supabase.rpc('refresh_chef_rating_stats', { chef_id: review.chef_id })
+    console.log('🔍 Attempting to refresh materialized view...')
+    try {
+      await supabase.rpc('refresh_chef_rating_stats', { chef_id: review.chef_id })
+      console.log('🔍 Materialized view refreshed successfully')
+    } catch (refreshError) {
+      console.error('🔍 Error refreshing materialized view:', refreshError)
+      // Continue anyway - the review is still published
+    }
     
     // === TRIGGER CACHE REVALIDATION ===
     // This ensures the new review appears immediately on the chef profile
+    console.log('🔍 Triggering cache revalidation...')
     revalidatePath(`/chef/${review.chef_id}`)
     revalidatePath('/') // Homepage ratings may have changed
     
+    console.log('🔍 Redirecting to chef profile with success message')
     // === REDIRECT WITH SUCCESS MESSAGE ===
     return NextResponse.redirect(new URL(`/chef/${review.chef_id}?success=review-published`, request.url))
     
