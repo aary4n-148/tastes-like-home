@@ -3,8 +3,9 @@
 import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
-import { hashEmail, hashIP, createSignedToken } from '@/lib/crypto'
+import { hashEmail, hashIP } from '@/lib/crypto'
 import { sendReviewVerificationEmail } from '@/lib/email'
+import crypto from 'crypto'
 
 // Type definitions for better type safety
 interface SubmitReviewResult {
@@ -108,7 +109,8 @@ export async function submitReview(
     }
 
     // === STORE VERIFICATION TOKEN ===
-    const verificationToken = createSignedToken(review.id, email)
+    // Use a simple UUID instead of signed token to match database schema
+    const verificationToken = crypto.randomUUID()
     await supabase
       .from('reviews')
       .update({ verification_token: verificationToken })
