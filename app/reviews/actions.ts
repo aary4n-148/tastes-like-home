@@ -24,6 +24,14 @@ export async function submitReview(
   email: string,
   securityToken: string // Simplified parameter - no longer used for Turnstile
 ): Promise<SubmitReviewResult> {
+  console.log('🔍 Starting review submission for chef:', chefId, 'email:', email)
+  
+  // Test environment variables first
+  if (!process.env.REVIEW_VERIFICATION_SECRET) {
+    console.error('🔍 Missing REVIEW_VERIFICATION_SECRET')
+    return { success: false, error: 'Server configuration error - missing verification secret' }
+  }
+  
   try {
     // === INPUT VALIDATION ===
     if (!rating || rating < 1 || rating > 5) {
