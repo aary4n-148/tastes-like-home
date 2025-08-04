@@ -86,6 +86,10 @@ export async function GET(request: NextRequest) {
         notes: 'Email verification completed successfully'
       })
     
+    // === REFRESH MATERIALIZED VIEW ===
+    // This ensures rating statistics are updated immediately
+    await supabase.rpc('refresh_chef_rating_stats', { chef_id: review.chef_id })
+    
     // === TRIGGER CACHE REVALIDATION ===
     // This ensures the new review appears immediately on the chef profile
     revalidatePath(`/chef/${review.chef_id}`)
