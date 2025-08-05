@@ -94,7 +94,8 @@ export async function submitReview(
       email_hash: emailHash,
       ip_hash: ipHash,
       status: 'awaiting_email',
-      turnstile_score: 0.5 // Default score since Turnstile is disabled
+      turnstile_score: 0.5, // Default score since Turnstile is disabled
+      verification_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours from now
     }
     
     const { data: review, error: insertError } = await supabase
@@ -147,4 +148,4 @@ export async function submitReview(
     console.error('Review submission error:', error)
     return { success: false, error: 'Something went wrong. Please try again.' }
   }
-} 
+}
