@@ -29,6 +29,63 @@ export async function approveChef(chefId: string) {
   }
 }
 
+export async function fetchAdminData() {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Fetch chefs
+    const { data: chefs, error: chefsError } = await supabase
+      .from('chefs')
+      .select(`
+        id,
+        name,
+        bio,
+        phone,
+        hourly_rate,
+        verified,
+        photo_url,
+        created_at,
+        chef_cuisines(cuisine)
+      `)
+      .order('created_at', { ascending: false })
+
+    if (chefsError) {
+      console.error('Error fetching chefs:', chefsError)
+      return { success: false, error: `Error loading chefs: ${chefsError.message}` }
+    }
+
+    // Fetch reviews
+    const { data: reviews, error: reviewsError } = await supabase
+      .from('reviews')
+      .select(`
+        id,
+        rating,
+        comment,
+        status,
+        created_at,
+        published_at,
+        chefs!inner(id, name)
+      `)
+      .order('created_at', { ascending: false })
+
+    if (reviewsError) {
+      console.error('Error fetching reviews:', reviewsError)
+      return { success: false, error: `Error loading reviews: ${reviewsError.message}` }
+    }
+
+    return {
+      success: true,
+      data: {
+        chefs: chefs || [],
+        reviews: reviews || []
+      }
+    }
+  } catch (error) {
+    console.error('Error in fetchAdminData:', error)
+    return { success: false, error: 'An unexpected error occurred while loading data' }
+  }
+}
+
 export async function publishReview(reviewId: string) {
   try {
     const supabase = createSupabaseAdminClient()

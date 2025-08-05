@@ -1,9 +1,9 @@
 'use client'
 
-import { createSupabaseAdminClient } from "@/lib/supabase-admin"
 import { ApprovalButton } from "@/components/approval-button"
 import { ReviewActions } from "@/components/admin/review-actions"
 import { Badge } from "@/components/ui/badge"
+import { fetchAdminData } from "@/app/admin/actions"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -40,63 +40,25 @@ export default function AdminPage() {
       setIsLoading(true)
       setError(null)
 
-      // Check if environment variables are available
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-        setError('Environment variables not configured. Please set up Supabase environment variables in Vercel.')
+      const result = await fetchAdminData()
+
+      if (!result.success) {
+        setError(result.error || 'Failed to load admin data')
         return
       }
 
-      const supabase = createSupabaseAdminClient()
-
-      // Fetch chefs
-      const { data: chefs, error: chefsError } = await supabase
-        .from('chefs')
-        .select(`
-          id,
-          name,
-          bio,
-          phone,
-          hourly_rate,
-          verified,
-          photo_url,
-          created_at,
-          chef_cuisines(cuisine)
-        `)
-        .order('created_at', { ascending: false })
-
-      if (chefsError) {
-        console.error('Error fetching chefs:', chefsError)
-        setError(`Error loading chefs: ${chefsError.message}`)
+      if (!result.data) {
+        setError('No data received from server')
         return
       }
 
-      // Fetch reviews
-      const { data: reviews, error: reviewsError } = await supabase
-        .from('reviews')
-        .select(`
-          id,
-          rating,
-          comment,
-          status,
-          created_at,
-          published_at,
-          chefs!inner(id, name)
-        `)
-        .order('created_at', { ascending: false })
-
-      if (reviewsError) {
-        console.error('Error fetching reviews:', reviewsError)
-        setError(`Error loading reviews: ${reviewsError.message}`)
-        return
-      }
-
-      setAllChefs(chefs || [])
-      setAllReviews(reviews || [])
+      setAllChefs(result.data.chefs)
+      setAllReviews(result.data.reviews)
 
       // Debug logging
-      console.log('Admin query results (using admin client):')
-      console.log('Chef count:', chefs?.length)
-      console.log('Review count:', reviews?.length)
+      console.log('Admin query results:')
+      console.log('Chef count:', result.data.chefs.length)
+      console.log('Review count:', result.data.reviews.length)
 
     } catch (err) {
       console.error('Error in fetchData:', err)
