@@ -1,76 +1,142 @@
+'use client'
+
 import { createSupabaseAdminClient } from "@/lib/supabase-admin"
 import { ApprovalButton } from "@/components/approval-button"
+import { ReviewActions } from "@/components/admin/review-actions"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
-export default async function AdminPage() {
-  // Check if environment variables are available (prevents build failures)
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return (
-      <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
-        <p className="text-red-600">Environment variables not configured. Please set up Supabase environment variables in Vercel.</p>
-      </div>
-    )
+interface Chef {
+  id: string
+  name: string
+  bio: string
+  phone: string
+  hourly_rate: number
+  verified: boolean
+  photo_url: string
+  created_at: string
+  chef_cuisines: { cuisine: string }[]
+}
+
+interface Review {
+  id: string
+  rating: number
+  comment: string | null
+  status: 'awaiting_email' | 'published' | 'spam'
+  created_at: string
+  published_at: string | null
+  chefs: { id: string; name: string }[]
+}
+
+export default function AdminPage() {
+  const [allChefs, setAllChefs] = useState<Chef[]>([])
+  const [allReviews, setAllReviews] = useState<Review[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      // Check if environment variables are available
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        setError('Environment variables not configured. Please set up Supabase environment variables in Vercel.')
+        return
+      }
+
+      const supabase = createSupabaseAdminClient()
+
+      // Fetch chefs
+      const { data: chefs, error: chefsError } = await supabase
+        .from('chefs')
+        .select(`
+          id,
+          name,
+          bio,
+          phone,
+          hourly_rate,
+          verified,
+          photo_url,
+          created_at,
+          chef_cuisines(cuisine)
+        `)
+        .order('created_at', { ascending: false })
+
+      if (chefsError) {
+        console.error('Error fetching chefs:', chefsError)
+        setError(`Error loading chefs: ${chefsError.message}`)
+        return
+      }
+
+      // Fetch reviews
+      const { data: reviews, error: reviewsError } = await supabase
+        .from('reviews')
+        .select(`
+          id,
+          rating,
+          comment,
+          status,
+          created_at,
+          published_at,
+          chefs!inner(id, name)
+        `)
+        .order('created_at', { ascending: false })
+
+      if (reviewsError) {
+        console.error('Error fetching reviews:', reviewsError)
+        setError(`Error loading reviews: ${reviewsError.message}`)
+        return
+      }
+
+      setAllChefs(chefs || [])
+      setAllReviews(reviews || [])
+
+      // Debug logging
+      console.log('Admin query results (using admin client):')
+      console.log('Chef count:', chefs?.length)
+      console.log('Review count:', reviews?.length)
+
+    } catch (err) {
+      console.error('Error in fetchData:', err)
+      setError('An unexpected error occurred while loading data')
+    } finally {
+      setIsLoading(false)
+    }
   }
-  
-  // Use admin client to bypass RLS and see all chefs
-  const supabase = createSupabaseAdminClient()
-  
-  // Get all chefs (verified and unverified) for admin view
-  const { data: allChefs, error: chefsError } = await supabase
-    .from('chefs')
-    .select(`
-      id,
-      name,
-      bio,
-      phone,
-      hourly_rate,
-      verified,
-      photo_url,
-      created_at,
-      chef_cuisines(cuisine)
-    `)
-    .order('created_at', { ascending: false })
 
-  // Get all reviews for admin view
-  const { data: allReviews, error: reviewsError } = await supabase
-    .from('reviews')
-    .select(`
-      id,
-      rating,
-      comment,
-      status,
-      created_at,
-      published_at,
-      chefs!inner(id, name)
-    `)
-    .order('created_at', { ascending: false })
+  useEffect(() => {
+    fetchData()
+  }, [])
 
-  // Debug logging
-  console.log('Admin query results (using admin client):')
-  console.log('Chefs Error:', chefsError)
-  console.log('Chef count:', allChefs?.length)
-  console.log('Reviews Error:', reviewsError)
-  console.log('Review count:', allReviews?.length)
-
-  if (chefsError) {
-    console.error('Error fetching chefs:', chefsError)
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <strong>Error loading admin panel:</strong>
-          <pre>{JSON.stringify(chefsError, null, 2)}</pre>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading admin panel...</p>
         </div>
       </div>
     )
   }
 
-  const pendingChefs = allChefs?.filter(chef => !chef.verified) || []
-  const verifiedChefs = allChefs?.filter(chef => chef.verified) || []
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <strong>Error loading admin panel:</strong>
+          <p>{error}</p>
+        </div>
+      </div>
+    )
+  }
+
+  const pendingChefs = allChefs.filter(chef => !chef.verified)
+  const verifiedChefs = allChefs.filter(chef => chef.verified)
 
   // Process reviews data
-  const reviews = allReviews || []
+  const reviews = allReviews
   const awaitingVerificationReviews = reviews.filter(review => review.status === 'awaiting_email')
   const publishedReviews = reviews.filter(review => review.status === 'published')
   const spamReviews = reviews.filter(review => review.status === 'spam')
@@ -95,7 +161,7 @@ export default async function AdminPage() {
           <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded">
             <h3 className="font-semibold text-green-800">✅ Admin Panel Working!</h3>
             <p className="text-sm text-green-700">
-              Database returned {allChefs?.length || 0} total chefs
+              Database returned {allChefs.length} total chefs
             </p>
             <p className="text-sm text-green-700">
               Verified: {verifiedChefs.length}, Pending: {pendingChefs.length}
@@ -106,7 +172,7 @@ export default async function AdminPage() {
             <details className="mt-2">
               <summary className="text-sm font-medium text-green-800 cursor-pointer">Show all chef names</summary>
               <ul className="text-xs text-green-700 mt-1">
-                {allChefs?.map(chef => (
+                {allChefs.map(chef => (
                   <li key={chef.id}>{chef.name} - {chef.verified ? 'Verified' : 'Pending'}</li>
                 ))}
               </ul>
@@ -118,7 +184,7 @@ export default async function AdminPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg p-6 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-900">Total Chefs</h3>
-            <p className="text-3xl font-bold text-blue-600">{allChefs?.length || 0}</p>
+            <p className="text-3xl font-bold text-blue-600">{allChefs.length}</p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-900">Verified</h3>
@@ -218,17 +284,12 @@ export default async function AdminPage() {
                       </div>
                       
                       {/* Action Buttons */}
-                      <div className="ml-4 flex gap-2">
-                        {review.status === 'awaiting_email' && (
-                          <button className="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                            Publish
-                          </button>
-                        )}
-                        {review.status !== 'spam' && (
-                          <button className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors">
-                            Delete
-                          </button>
-                        )}
+                      <div className="ml-4">
+                        <ReviewActions 
+                          reviewId={review.id}
+                          status={review.status}
+                          onAction={fetchData}
+                        />
                       </div>
                     </div>
                   </div>
