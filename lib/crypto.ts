@@ -29,7 +29,10 @@ export function generateVerificationToken(): string {
  * Contains review ID and email, expires in 24 hours
  */
 export function createSignedToken(reviewId: string, email: string): string {
-  const secret = process.env.REVIEW_VERIFICATION_SECRET!
+  const secret = process.env.REVIEW_VERIFICATION_SECRET
+  if (!secret) {
+    throw new Error('REVIEW_VERIFICATION_SECRET environment variable is not set')
+  }
   const payload = `${reviewId}:${email}:${Date.now()}`
   const signature = crypto.createHmac('sha256', secret).update(payload).digest('hex')
   return `${Buffer.from(payload).toString('base64')}.${signature}`
@@ -50,7 +53,10 @@ export function verifySignedToken(token: string): { reviewId: string; email: str
     if (!reviewId || !email || !timestamp) return null
     
     // Verify signature to ensure token wasn't tampered with
-    const secret = process.env.REVIEW_VERIFICATION_SECRET!
+    const secret = process.env.REVIEW_VERIFICATION_SECRET
+    if (!secret) {
+      throw new Error('REVIEW_VERIFICATION_SECRET environment variable is not set')
+    }
     const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex')
     
     if (signature !== expectedSignature) return null
