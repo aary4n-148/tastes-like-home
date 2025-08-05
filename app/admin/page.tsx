@@ -37,21 +37,29 @@ export default function AdminPage() {
 
   const fetchData = async () => {
     try {
+      console.log('Starting fetchData...')
       setIsLoading(true)
       setError(null)
 
+      console.log('Calling fetchAdminData...')
       const result = await fetchAdminData()
+      console.log('fetchAdminData result:', result)
 
       if (!result.success) {
+        console.error('Server action failed:', result.error)
         setError(result.error || 'Failed to load admin data')
+        setIsLoading(false)
         return
       }
 
       if (!result.data) {
+        console.error('No data received from server')
         setError('No data received from server')
+        setIsLoading(false)
         return
       }
 
+      console.log('Setting data...')
       setAllChefs(result.data.chefs)
       setAllReviews(result.data.reviews)
 
@@ -64,6 +72,7 @@ export default function AdminPage() {
       console.error('Error in fetchData:', err)
       setError('An unexpected error occurred while loading data')
     } finally {
+      console.log('Setting loading to false...')
       setIsLoading(false)
     }
   }
