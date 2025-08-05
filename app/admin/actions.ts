@@ -64,7 +64,7 @@ export async function fetchAdminData() {
         status,
         created_at,
         published_at,
-        chefs!inner(id, name)
+        chefs(id, name)
       `)
       .order('created_at', { ascending: false })
 

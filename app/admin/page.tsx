@@ -26,7 +26,7 @@ interface Review {
   status: 'awaiting_email' | 'published' | 'spam'
   created_at: string
   published_at: string | null
-  chefs: { id: string; name: string }[]
+  chefs: { id: string; name: string }
 }
 
 export default function AdminPage() {
@@ -207,7 +207,7 @@ export default function AdminPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h4 className="font-medium text-gray-900">
-                            {review.chefs?.[0]?.name || 'Unknown Chef'}
+                            {review.chefs?.name || 'Unknown Chef'}
                           </h4>
                           <Badge 
                             variant={review.status === 'published' ? 'secondary' : 
