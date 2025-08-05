@@ -37,42 +37,30 @@ export default function AdminPage() {
 
   const fetchData = async () => {
     try {
-      console.log('Starting fetchData...')
       setIsLoading(true)
       setError(null)
 
-      console.log('Calling fetchAdminData...')
       const result = await fetchAdminData()
-      console.log('fetchAdminData result:', result)
 
       if (!result.success) {
-        console.error('Server action failed:', result.error)
         setError(result.error || 'Failed to load admin data')
         setIsLoading(false)
         return
       }
 
       if (!result.data) {
-        console.error('No data received from server')
         setError('No data received from server')
         setIsLoading(false)
         return
       }
 
-      console.log('Setting data...')
       setAllChefs(result.data.chefs)
       setAllReviews(result.data.reviews)
-
-      // Debug logging
-      console.log('Admin query results:')
-      console.log('Chef count:', result.data.chefs.length)
-      console.log('Review count:', result.data.reviews.length)
 
     } catch (err) {
       console.error('Error in fetchData:', err)
       setError('An unexpected error occurred while loading data')
     } finally {
-      console.log('Setting loading to false...')
       setIsLoading(false)
     }
   }
@@ -127,28 +115,6 @@ export default function AdminPage() {
             </Link>
           </div>
           <p className="text-gray-600 mt-2">Manage chef applications, approvals, and reviews</p>
-          
-          {/* Debug info - remove this later when everything is working */}
-          <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded">
-            <h3 className="font-semibold text-green-800">✅ Admin Panel Working!</h3>
-            <p className="text-sm text-green-700">
-              Database returned {allChefs.length} total chefs
-            </p>
-            <p className="text-sm text-green-700">
-              Verified: {verifiedChefs.length}, Pending: {pendingChefs.length}
-            </p>
-            <p className="text-sm text-green-700">
-              Reviews: {reviews.length} total ({awaitingVerificationReviews.length} awaiting, {publishedReviews.length} published, {spamReviews.length} spam)
-            </p>
-            <details className="mt-2">
-              <summary className="text-sm font-medium text-green-800 cursor-pointer">Show all chef names</summary>
-              <ul className="text-xs text-green-700 mt-1">
-                {allChefs.map(chef => (
-                  <li key={chef.id}>{chef.name} - {chef.verified ? 'Verified' : 'Pending'}</li>
-                ))}
-              </ul>
-            </details>
-          </div>
         </div>
 
         {/* Statistics */}
