@@ -1,6 +1,6 @@
 'use server'
 
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 import { revalidatePath } from 'next/cache'
 
 interface ApplicationData {
@@ -9,7 +9,7 @@ interface ApplicationData {
 
 export async function submitApplication(formData: FormData): Promise<{ success: boolean; error?: string; applicationId?: string }> {
   try {
-    const supabase = await createSupabaseServerClient()
+    const supabase = createSupabaseAdminClient()
 
     // Extract form data into a clean object
     const applicationData: ApplicationData = {}
