@@ -11,13 +11,14 @@ interface ApplicationPageProps {
 }
 
 export default async function ApplicationReviewPage({ params }: ApplicationPageProps) {
+  const { id } = await params
   const supabase = createSupabaseAdminClient()
 
   // Fetch the specific application
   const { data: application, error } = await supabase
     .from('chef_applications')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !application) {
