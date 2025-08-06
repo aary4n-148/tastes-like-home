@@ -1,0 +1,95 @@
+'use server'
+
+import { createSupabaseAdminClient } from '@/lib/supabase-admin'
+import { revalidatePath } from 'next/cache'
+
+/**
+ * Interface for chef application form data
+ * Supports both string and numeric values for flexible form handling
+ */
+interface ApplicationData {
+  [key: string]: string | number
+}
+
+/**
+ * Result interface for application submission
+ */
+interface SubmissionResult {
+  success: boolean
+  error?: string
+  applicationId?: string
+}
+
+/**
+ * Submits a chef application to the database
+ * 
+ * @param formData - FormData object containing application fields
+ * @returns Promise with success status, error message, and application ID
+ * 
+ * Features:
+ * - Validates required fields (name, email)
+ * - Validates email format using regex
+ * - Converts hourly rate to number automatically
+ * - Uses admin client to bypass RLS restrictions
+ * - Revalidates admin page cache after submission
+ */
+export async function submitApplication(formData: FormData): Promise<SubmissionResult> {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Extract form data into a clean object
+    const applicationData: ApplicationData = {}
+    
+    // Get all form fields (excluding any file uploads for now)
+    for (const [key, value] of formData.entries()) {
+      if (typeof value === 'string' && value.trim()) {
+        // Convert hourly rate to number if it's the rate field
+        if (key.toLowerCase().includes('rate') && !isNaN(Number(value))) {
+          applicationData[key] = Number(value)
+        } else {
+          applicationData[key] = value.trim()
+        }
+      }
+    }
+
+    // Basic validation
+    if (!applicationData['Full Name'] || !applicationData['Email Address']) {
+      return { success: false, error: 'Full name and email are required' }
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(applicationData['Email Address'] as string)) {
+      return { success: false, error: 'Please enter a valid email address' }
+    }
+
+    // Insert application into database
+    const { data: application, error: insertError } = await supabase
+      .from('chef_applications')
+      .insert({
+        answers: applicationData,
+        status: 'pending'
+      })
+      .select('id')
+      .single()
+
+    if (insertError) {
+      console.error('Database error:', insertError)
+      return { success: false, error: 'Failed to submit application. Please try again.' }
+    }
+
+    // Note: Email notifications will be implemented in future iteration
+    
+    // Revalidate admin page to show new application
+    revalidatePath('/admin')
+
+    return { 
+      success: true, 
+      applicationId: application.id 
+    }
+
+  } catch (error) {
+    console.error('Application submission error:', error)
+    return { success: false, error: 'An unexpected error occurred. Please try again.' }
+  }
+}
