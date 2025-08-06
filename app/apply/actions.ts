@@ -110,17 +110,14 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
       }
 
       // Send admin alert email
-      console.log('📧 Attempting to send admin alert email to:', process.env.ADMIN_EMAIL)
       const adminAlertResult = await sendAdminApplicationAlert(
         chefName,
         chefEmail,
         application.id
       )
       
-      if (adminAlertResult.success) {
-        console.log('✅ Admin alert email sent successfully')
-      } else {
-        console.error('❌ Failed to send admin alert email:', adminAlertResult.error)
+      if (!adminAlertResult.success) {
+        console.error('Failed to send admin alert email:', adminAlertResult.error)
         // Continue anyway - application is saved
       }
     }

@@ -115,11 +115,6 @@ export async function sendAdminApplicationAlert(
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@tastes-like-home.com'
     const reviewUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/admin/applications/${applicationId}`
     
-    console.log('📧 Sending admin alert email:')
-    console.log('  - To:', adminEmail)
-    console.log('  - Subject:', `New Chef Application: ${chefName}`)
-    console.log('  - Review URL:', reviewUrl)
-    
     const result = await resend.emails.send({
       from: 'Tastes Like Home <noreply@tastes-like-home.com>',
       to: adminEmail,
@@ -127,7 +122,6 @@ export async function sendAdminApplicationAlert(
       html: createAdminAlertHTML(chefName, email, reviewUrl)
     })
     
-    console.log('📧 Resend API result:', result)
     return { success: true }
   } catch (error) {
     console.error('Admin alert email failed:', error)
