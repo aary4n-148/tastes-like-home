@@ -241,7 +241,32 @@ export async function deleteReview(reviewId: string) {
   }
 }
 
-// Application Management Functions
+/**
+ * ============================================================================
+ * CHEF APPLICATION MANAGEMENT FUNCTIONS
+ * ============================================================================
+ * 
+ * These functions handle the complete chef application lifecycle:
+ * - approveApplication: Converts applications to live chef profiles
+ * - rejectApplication: Marks applications as rejected with optional reason
+ * - updateApplicationNotes: Adds internal admin notes to applications
+ * 
+ * All functions use the admin client for full database access and include
+ * proper error handling, logging, and cache invalidation.
+ */
+/**
+ * Approves a chef application and creates a live chef profile
+ * 
+ * @param applicationId - UUID of the application to approve
+ * @returns Promise with success status and optional chef ID
+ * 
+ * Process:
+ * 1. Validates application exists and is pending
+ * 2. Creates chef record with verified=true
+ * 3. Parses and inserts cuisine specialties
+ * 4. Updates application status to approved
+ * 5. Revalidates affected page caches
+ */
 export async function approveApplication(applicationId: string) {
   try {
     const supabase = createSupabaseAdminClient()
@@ -316,7 +341,7 @@ export async function approveApplication(applicationId: string) {
       // Continue anyway - chef is created
     }
 
-    // TODO: Send approval email (will add in later step)
+    // Note: Approval email notifications will be implemented in future iteration
 
     // Revalidate pages
     revalidatePath('/admin')
@@ -329,6 +354,13 @@ export async function approveApplication(applicationId: string) {
   }
 }
 
+/**
+ * Rejects a chef application with optional reason
+ * 
+ * @param applicationId - UUID of the application to reject
+ * @param reason - Optional rejection reason for admin notes
+ * @returns Promise with success status
+ */
 export async function rejectApplication(applicationId: string, reason?: string) {
   try {
     const supabase = createSupabaseAdminClient()
@@ -349,7 +381,7 @@ export async function rejectApplication(applicationId: string, reason?: string) 
       return { success: false, error: 'Failed to reject application' }
     }
 
-    // TODO: Send rejection email (will add in later step)
+    // Note: Rejection email notifications will be implemented in future iteration
 
     // Revalidate admin page
     revalidatePath('/admin')
@@ -361,6 +393,13 @@ export async function rejectApplication(applicationId: string, reason?: string) 
   }
 }
 
+/**
+ * Updates admin notes for a chef application
+ * 
+ * @param applicationId - UUID of the application to update
+ * @param notes - Admin notes text
+ * @returns Promise with success status
+ */
 export async function updateApplicationNotes(applicationId: string, notes: string) {
   try {
     const supabase = createSupabaseAdminClient()

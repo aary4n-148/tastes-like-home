@@ -6,6 +6,22 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { approveApplication, rejectApplication, updateApplicationNotes } from '@/app/admin/actions'
 
+/**
+ * Individual Chef Application Review Page
+ * 
+ * Provides a detailed view of a single chef application with admin controls
+ * for approval, rejection, and note-taking. Features a clean two-column layout
+ * with comprehensive application details and action buttons.
+ * 
+ * Features:
+ * - Complete application data display
+ * - Approve/reject workflow with server actions
+ * - Admin notes functionality with auto-save
+ * - Application timeline and audit trail
+ * - Photo upload placeholders for future implementation
+ * - Responsive design with proper error handling
+ */
+
 interface ApplicationPageProps {
   params: { id: string }
 }

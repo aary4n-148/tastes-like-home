@@ -7,6 +7,20 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { submitApplication } from '@/app/apply/actions'
 
+/**
+ * Chef Application Form Component
+ * 
+ * A dynamic form that renders questions from the database and handles
+ * chef application submissions with proper validation and user feedback.
+ * 
+ * Features:
+ * - Dynamic field rendering based on database questions
+ * - Client-side validation for required fields
+ * - Anti-spam honeypot protection
+ * - Success/error messaging with automatic form reset
+ * - Responsive design with accessibility support
+ */
+
 interface Question {
   id: string
   text: string
@@ -116,7 +130,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
             <p className="text-sm text-gray-500 mb-2">Photo upload coming soon!</p>
             <p className="text-xs text-gray-400">{question.hint_text}</p>
-            {/* TODO: Implement file upload in next step */}
+            {/* File upload functionality will be implemented in future iteration */}
           </div>
         )
       

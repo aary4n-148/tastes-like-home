@@ -3,11 +3,37 @@
 import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 import { revalidatePath } from 'next/cache'
 
+/**
+ * Interface for chef application form data
+ * Supports both string and numeric values for flexible form handling
+ */
 interface ApplicationData {
   [key: string]: string | number
 }
 
-export async function submitApplication(formData: FormData): Promise<{ success: boolean; error?: string; applicationId?: string }> {
+/**
+ * Result interface for application submission
+ */
+interface SubmissionResult {
+  success: boolean
+  error?: string
+  applicationId?: string
+}
+
+/**
+ * Submits a chef application to the database
+ * 
+ * @param formData - FormData object containing application fields
+ * @returns Promise with success status, error message, and application ID
+ * 
+ * Features:
+ * - Validates required fields (name, email)
+ * - Validates email format using regex
+ * - Converts hourly rate to number automatically
+ * - Uses admin client to bypass RLS restrictions
+ * - Revalidates admin page cache after submission
+ */
+export async function submitApplication(formData: FormData): Promise<SubmissionResult> {
   try {
     const supabase = createSupabaseAdminClient()
 
@@ -52,7 +78,7 @@ export async function submitApplication(formData: FormData): Promise<{ success: 
       return { success: false, error: 'Failed to submit application. Please try again.' }
     }
 
-    // TODO: Send notification emails (will add in later step)
+    // Note: Email notifications will be implemented in future iteration
     
     // Revalidate admin page to show new application
     revalidatePath('/admin')
