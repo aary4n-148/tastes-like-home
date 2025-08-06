@@ -136,24 +136,63 @@ export default async function ApplicationReviewPage({ params }: ApplicationPageP
             {/* Photo Uploads */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Photos</h2>
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Profile Photos */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">Profile Photo</h3>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
-                    <p className="text-sm text-gray-500">Photo upload coming in next step</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {answers['Profile Photo'] ? 'File uploaded' : 'No file uploaded'}
-                    </p>
-                  </div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Profile Photo</h3>
+                  {application.file_uploads?.profile_photos && application.file_uploads.profile_photos.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {application.file_uploads.profile_photos.map((photo: any, index: number) => (
+                        <div key={index} className="relative group">
+                          <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                            <img
+                              src={photo.fileUrl}
+                              alt={`Profile photo ${index + 1}`}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-500 truncate" title={photo.fileName}>
+                              {photo.fileName?.split('/').pop() || 'Uploaded image'}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
+                      <p className="text-sm text-gray-500">No profile photo uploaded</p>
+                    </div>
+                  )}
                 </div>
+
+                {/* Food Photos */}
                 <div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">Food Photos</h3>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
-                    <p className="text-sm text-gray-500">Photo upload coming in next step</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {answers['Food Photos'] ? 'File uploaded' : 'No file uploaded'}
-                    </p>
-                  </div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Food Photos</h3>
+                  {application.file_uploads?.food_photos && application.file_uploads.food_photos.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                      {application.file_uploads.food_photos.map((photo: any, index: number) => (
+                        <div key={index} className="relative group">
+                          <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                            <img
+                              src={photo.fileUrl}
+                              alt={`Food photo ${index + 1}`}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-500 truncate" title={photo.fileName}>
+                              {photo.fileName?.split('/').pop() || 'Uploaded image'}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
+                      <p className="text-sm text-gray-500">No food photos uploaded</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
