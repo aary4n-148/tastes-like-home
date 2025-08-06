@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { submitApplication } from '@/app/apply/actions'
+import FileUpload from '@/components/file-upload'
+import type { FileUploadResult } from '@/lib/storage'
 
 /**
  * Chef Application Form Component
@@ -37,12 +39,23 @@ interface ApplicationFormProps {
 export default function ApplicationForm({ questions }: ApplicationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<{
+    profile_photos: FileUploadResult[]
+    food_photos: FileUploadResult[]
+  }>({
+    profile_photos: [],
+    food_photos: []
+  })
+  const [applicationId] = useState(() => `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
 
   async function handleSubmit(formData: FormData) {
     setIsSubmitting(true)
     setSubmitStatus(null)
 
     try {
+      // Add uploaded file information to form data
+      formData.append('file_uploads', JSON.stringify(uploadedFiles))
+      
       const result = await submitApplication(formData)
       
       if (result.success) {
@@ -126,12 +139,30 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         )
       
       case 'photo':
+        const isProfilePhoto = question.text.toLowerCase().includes('profile')
+        const fileType = isProfilePhoto ? 'profile' : 'food'
+        const maxFiles = isProfilePhoto ? 1 : 5
+        
         return (
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-            <p className="text-sm text-gray-500 mb-2">Photo upload coming soon!</p>
-            <p className="text-xs text-gray-400">{question.hint_text}</p>
-            {/* File upload functionality will be implemented in future iteration */}
-          </div>
+          <FileUpload
+            fileType={fileType}
+            maxFiles={maxFiles}
+            applicationId={applicationId}
+            label={question.text}
+            helpText={question.hint_text || `Upload ${isProfilePhoto ? 'your profile photo' : 'photos of your food'}`}
+            onFilesUploaded={(files) => {
+              setUploadedFiles(prev => ({
+                ...prev,
+                [fileType === 'profile' ? 'profile_photos' : 'food_photos']: [
+                  ...prev[fileType === 'profile' ? 'profile_photos' : 'food_photos'],
+                  ...files
+                ]
+              }))
+            }}
+            onUploadError={(error) => {
+              setSubmitStatus({ type: 'error', message: error })
+            }}
+          />
         )
       
       default:

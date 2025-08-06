@@ -39,9 +39,19 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
 
     // Extract form data into a clean object
     const applicationData: ApplicationData = {}
+    let fileUploads = { profile_photos: [], food_photos: [] }
     
-    // Get all form fields (excluding any file uploads for now)
+    // Get all form fields
     for (const [key, value] of formData.entries()) {
+      // Handle file uploads separately
+      if (key === 'file_uploads' && typeof value === 'string') {
+        try {
+          fileUploads = JSON.parse(value)
+        } catch (e) {
+          console.warn('Failed to parse file uploads:', e)
+        }
+        continue
+      }
       if (typeof value === 'string' && value.trim()) {
         // Convert hourly rate to number if it's the rate field
         if (key.toLowerCase().includes('rate') && !isNaN(Number(value))) {
@@ -68,6 +78,7 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
       .from('chef_applications')
       .insert({
         answers: applicationData,
+        file_uploads: fileUploads,
         status: 'pending'
       })
       .select('id')
