@@ -441,8 +441,7 @@ export async function rejectApplication(applicationId: string, reason?: string) 
     if (chefEmail && chefName) {
       const rejectionResult = await sendApplicationRejectionEmail(
         chefEmail,
-        chefName,
-        reason
+        chefName
       )
       
       if (!rejectionResult.success) {

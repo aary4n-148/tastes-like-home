@@ -314,7 +314,7 @@ function createApplicationConfirmationHTML(chefName: string, applicationId: stri
             <strong>Application ID:</strong> ${applicationId.substring(0, 8)}
           </p>
           <p style="color: #6b7280; font-size: 14px; margin: 0;">
-            Questions? Reply to this email or contact us anytime.
+            We'll keep you updated on your application status.
           </p>
         </div>
       </div>
@@ -435,7 +435,7 @@ function createApprovalEmailHTML(chefName: string, profileUrl: string): string {
             <strong>Welcome to the team!</strong> We're excited to have you cooking with us.
           </p>
           <p style="color: #6b7280; font-size: 14px; margin: 0;">
-            Questions? Reply to this email and we'll help you get started.
+            Welcome to the Tastes Like Home chef community!
           </p>
         </div>
       </div>
@@ -477,12 +477,18 @@ function createRejectionEmailHTML(chefName: string, reason?: string): string {
           Thank you for your interest in joining Tastes Like Home. After careful review, we're unable to approve your application at this time.
         </p>
 
-        ${reason ? `
         <div style="background: #fff; padding: 20px; border-radius: 6px; border: 1px solid #e5e7eb; margin: 20px 0;">
-          <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">Feedback</h3>
-          <p style="color: #374151; margin: 0; font-size: 16px;">${reason}</p>
+          <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">How to improve your application</h3>
+          <p style="color: #374151; margin: 0 0 15px 0; font-size: 16px;">
+            To strengthen future applications, please consider:
+          </p>
+          <ul style="color: #374151; margin: 0; padding-left: 20px; font-size: 16px;">
+            <li style="margin-bottom: 8px;">Upload high-quality photos that showcase your cooking skills and food presentation</li>
+            <li style="margin-bottom: 8px;">Provide a detailed bio highlighting your culinary experience and specialties</li>
+            <li style="margin-bottom: 8px;">Ensure all information is complete and accurately represents your expertise</li>
+            <li style="margin-bottom: 0;">Include examples of dishes that demonstrate your unique cooking style</li>
+          </ul>
         </div>
-        ` : ''}
 
         <div style="background: #eff6ff; padding: 20px; border-radius: 6px; border: 1px solid #3b82f6; margin: 20px 0;">
           <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 18px;">We'd love to hear from you again!</h3>
@@ -494,7 +500,7 @@ function createRejectionEmailHTML(chefName: string, reason?: string): string {
         
         <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 30px;">
           <p style="color: #6b7280; font-size: 14px; margin: 0;">
-            Questions about this decision? Reply to this email and we'll be happy to provide more detailed feedback.
+            Thank you for your interest in joining our chef community.
           </p>
         </div>
       </div>
