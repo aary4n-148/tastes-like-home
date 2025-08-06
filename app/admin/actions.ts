@@ -288,6 +288,13 @@ export async function approveApplication(applicationId: string) {
 
     // Create chef record from application data
     const answers = application.answers as Record<string, any>
+    const fileUploads = application.file_uploads || { profile_photos: [], food_photos: [] }
+    
+    // Get the first profile photo URL if available
+    let photoUrl = null
+    if (fileUploads.profile_photos && fileUploads.profile_photos.length > 0) {
+      photoUrl = fileUploads.profile_photos[0].fileUrl
+    }
     
     const { data: newChef, error: chefError } = await supabase
       .from('chefs')
@@ -296,8 +303,8 @@ export async function approveApplication(applicationId: string) {
         bio: answers['Bio/About You'],
         phone: answers['Phone Number'],
         hourly_rate: answers['Hourly Rate (£)'],
+        photo_url: photoUrl, // Use uploaded profile photo
         verified: true, // Auto-approve when created from application
-        // photo_url will be handled when we add file uploads
       })
       .select('id')
       .single()
@@ -322,6 +329,24 @@ export async function approveApplication(applicationId: string) {
 
       if (cuisineError) {
         console.error('Error adding cuisines:', cuisineError)
+        // Continue anyway - chef is created
+      }
+    }
+
+    // Add food photos from application
+    if (fileUploads.food_photos && fileUploads.food_photos.length > 0) {
+      const foodPhotoInserts = fileUploads.food_photos.map((photo: any, index: number) => ({
+        chef_id: newChef.id,
+        photo_url: photo.fileUrl,
+        display_order: index
+      }))
+
+      const { error: photoError } = await supabase
+        .from('food_photos')
+        .insert(foodPhotoInserts)
+
+      if (photoError) {
+        console.error('Error adding food photos:', photoError)
         // Continue anyway - chef is created
       }
     }
