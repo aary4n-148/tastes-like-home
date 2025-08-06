@@ -42,6 +42,12 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
     const applicationData: ApplicationData = {}
     let fileUploads = { profile_photos: [], food_photos: [] }
     
+    // Debug: Log all form fields
+    console.log('🔍 Form submission debug:')
+    for (const [key, value] of formData.entries()) {
+      console.log(`  ${key}: ${value}`)
+    }
+    
     // Get all form fields
     for (const [key, value] of formData.entries()) {
       // Handle file uploads separately
@@ -73,6 +79,10 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
     if (!emailRegex.test(applicationData['Email Address'] as string)) {
       return { success: false, error: 'Please enter a valid email address' }
     }
+
+    // Debug: Log final processed data
+    console.log('📋 Final application data:')
+    console.log(JSON.stringify(applicationData, null, 2))
 
     // Insert application into database
     const { data: application, error: insertError } = await supabase

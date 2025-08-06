@@ -130,6 +130,25 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         )
       
       case 'textarea':
+        // Special handling for Best Dishes field
+        if (question.text === 'Best Dishes') {
+          return (
+            <div className="space-y-3">
+              <Textarea
+                {...commonProps}
+                rows={4}
+                placeholder="Example: Butter Chicken, Biryani, Samosas, Dhal, Naan"
+              />
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <p className="text-sm text-yellow-800">
+                  <strong>💡 Format:</strong> List your signature dishes separated by commas.<br/>
+                  <strong>Example:</strong> "Butter Chicken, Chicken Biryani, Vegetable Samosas, Tarka Dhal, Garlic Naan"
+                </p>
+              </div>
+            </div>
+          )
+        }
+        
         return (
           <Textarea
             {...commonProps}
