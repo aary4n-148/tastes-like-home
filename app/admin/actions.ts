@@ -54,6 +54,26 @@ export async function fetchAdminData() {
       return { success: false, error: `Error loading chefs: ${chefsError.message}` }
     }
 
+    // Fetch chef applications
+    const { data: applications, error: applicationsError } = await supabase
+      .from('chef_applications')
+      .select(`
+        id,
+        answers,
+        status,
+        admin_notes,
+        created_at,
+        updated_at,
+        approved_at,
+        rejected_at
+      `)
+      .order('created_at', { ascending: false })
+
+    if (applicationsError) {
+      console.error('Error fetching applications:', applicationsError)
+      return { success: false, error: `Error loading applications: ${applicationsError.message}` }
+    }
+
     // Fetch reviews
     const { data: reviews, error: reviewsError } = await supabase
       .from('reviews')
@@ -77,7 +97,8 @@ export async function fetchAdminData() {
       success: true,
       data: {
         chefs: chefs || [],
-        reviews: reviews || []
+        reviews: reviews || [],
+        applications: applications || []
       }
     }
   } catch (error) {
@@ -217,5 +238,150 @@ export async function deleteReview(reviewId: string) {
   } catch (error) {
     console.error('Error in deleteReview action:', error)
     return { success: false, error: 'Failed to delete review' }
+  }
+}
+
+// Application Management Functions
+export async function approveApplication(applicationId: string) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // First, get the application data
+    const { data: application, error: fetchError } = await supabase
+      .from('chef_applications')
+      .select('*')
+      .eq('id', applicationId)
+      .single()
+
+    if (fetchError || !application) {
+      return { success: false, error: 'Application not found' }
+    }
+
+    if (application.status !== 'pending') {
+      return { success: false, error: 'Application has already been processed' }
+    }
+
+    // Create chef record from application data
+    const answers = application.answers as Record<string, any>
+    
+    const { data: newChef, error: chefError } = await supabase
+      .from('chefs')
+      .insert({
+        name: answers['Full Name'],
+        bio: answers['Bio/About You'],
+        phone: answers['Phone Number'],
+        hourly_rate: answers['Hourly Rate (£)'],
+        verified: true, // Auto-approve when created from application
+        // photo_url will be handled when we add file uploads
+      })
+      .select('id')
+      .single()
+
+    if (chefError) {
+      console.error('Error creating chef:', chefError)
+      return { success: false, error: 'Failed to create chef profile' }
+    }
+
+    // Add cuisine specialties
+    if (answers['Cuisine Specialties']) {
+      const cuisines = answers['Cuisine Specialties'].split(',').map((c: string) => c.trim())
+      
+      const cuisineInserts = cuisines.map((cuisine: string) => ({
+        chef_id: newChef.id,
+        cuisine: cuisine
+      }))
+
+      const { error: cuisineError } = await supabase
+        .from('chef_cuisines')
+        .insert(cuisineInserts)
+
+      if (cuisineError) {
+        console.error('Error adding cuisines:', cuisineError)
+        // Continue anyway - chef is created
+      }
+    }
+
+    // Update application status
+    const { error: updateError } = await supabase
+      .from('chef_applications')
+      .update({
+        status: 'approved',
+        approved_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', applicationId)
+
+    if (updateError) {
+      console.error('Error updating application status:', updateError)
+      // Continue anyway - chef is created
+    }
+
+    // TODO: Send approval email (will add in later step)
+
+    // Revalidate pages
+    revalidatePath('/admin')
+    revalidatePath('/')
+
+    return { success: true, chefId: newChef.id }
+  } catch (error) {
+    console.error('Error in approveApplication:', error)
+    return { success: false, error: 'Failed to approve application' }
+  }
+}
+
+export async function rejectApplication(applicationId: string, reason?: string) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Update application status
+    const { error: updateError } = await supabase
+      .from('chef_applications')
+      .update({
+        status: 'rejected',
+        rejected_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        admin_notes: reason || null
+      })
+      .eq('id', applicationId)
+
+    if (updateError) {
+      console.error('Error rejecting application:', updateError)
+      return { success: false, error: 'Failed to reject application' }
+    }
+
+    // TODO: Send rejection email (will add in later step)
+
+    // Revalidate admin page
+    revalidatePath('/admin')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in rejectApplication:', error)
+    return { success: false, error: 'Failed to reject application' }
+  }
+}
+
+export async function updateApplicationNotes(applicationId: string, notes: string) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    const { error } = await supabase
+      .from('chef_applications')
+      .update({
+        admin_notes: notes,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', applicationId)
+
+    if (error) {
+      console.error('Error updating application notes:', error)
+      return { success: false, error: 'Failed to update notes' }
+    }
+
+    revalidatePath('/admin')
+    return { success: true }
+  } catch (error) {
+    console.error('Error in updateApplicationNotes:', error)
+    return { success: false, error: 'Failed to update notes' }
   }
 } 
