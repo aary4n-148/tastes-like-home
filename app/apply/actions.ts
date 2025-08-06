@@ -9,7 +9,7 @@ interface ApplicationData {
 
 export async function submitApplication(formData: FormData): Promise<{ success: boolean; error?: string; applicationId?: string }> {
   try {
-    const supabase = createSupabaseServerClient()
+    const supabase = await createSupabaseServerClient()
 
     // Extract form data into a clean object
     const applicationData: ApplicationData = {}

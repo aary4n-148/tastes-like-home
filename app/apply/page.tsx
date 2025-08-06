@@ -3,7 +3,7 @@ import ApplicationForm from '@/components/application-form'
 
 export default async function ApplyPage() {
   // Fetch the questions from the database
-  const supabase = createSupabaseServerClient()
+  const supabase = await createSupabaseServerClient()
   
   const { data: questions, error } = await supabase
     .from('chef_questions')
