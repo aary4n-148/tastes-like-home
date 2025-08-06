@@ -2,6 +2,7 @@
 
 import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 import { revalidatePath } from 'next/cache'
+import { sendApplicationApprovalEmail, sendApplicationRejectionEmail } from '@/lib/email'
 
 export async function approveChef(chefId: string) {
   try {
@@ -366,7 +367,21 @@ export async function approveApplication(applicationId: string) {
       // Continue anyway - chef is created
     }
 
-    // Note: Approval email notifications will be implemented in future iteration
+    // Send approval email to chef
+    const chefEmail = answers['Email Address'] as string
+    const chefName = answers['Full Name'] as string
+    if (chefEmail && chefName) {
+      const approvalResult = await sendApplicationApprovalEmail(
+        chefEmail,
+        chefName,
+        newChef.id
+      )
+      
+      if (!approvalResult.success) {
+        console.error('Failed to send approval email:', approvalResult.error)
+        // Continue anyway - chef is created and approved
+      }
+    }
 
     // Revalidate pages
     revalidatePath('/admin')
@@ -390,6 +405,18 @@ export async function rejectApplication(applicationId: string, reason?: string) 
   try {
     const supabase = createSupabaseAdminClient()
 
+    // First, get the application data for email
+    const { data: application, error: fetchError } = await supabase
+      .from('chef_applications')
+      .select('answers')
+      .eq('id', applicationId)
+      .single()
+
+    if (fetchError || !application) {
+      console.error('Error fetching application for rejection:', fetchError)
+      return { success: false, error: 'Application not found' }
+    }
+
     // Update application status
     const { error: updateError } = await supabase
       .from('chef_applications')
@@ -406,7 +433,23 @@ export async function rejectApplication(applicationId: string, reason?: string) 
       return { success: false, error: 'Failed to reject application' }
     }
 
-    // Note: Rejection email notifications will be implemented in future iteration
+    // Send rejection email to chef
+    const answers = application.answers as Record<string, any>
+    const chefEmail = answers['Email Address'] as string
+    const chefName = answers['Full Name'] as string
+    
+    if (chefEmail && chefName) {
+      const rejectionResult = await sendApplicationRejectionEmail(
+        chefEmail,
+        chefName,
+        reason
+      )
+      
+      if (!rejectionResult.success) {
+        console.error('Failed to send rejection email:', rejectionResult.error)
+        // Continue anyway - application is rejected
+      }
+    }
 
     // Revalidate admin page
     revalidatePath('/admin')

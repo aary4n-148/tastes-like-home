@@ -2,6 +2,7 @@
 
 import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 import { revalidatePath } from 'next/cache'
+import { sendApplicationConfirmationEmail, sendAdminApplicationAlert } from '@/lib/email'
 
 /**
  * Interface for chef application form data
@@ -89,7 +90,34 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
       return { success: false, error: 'Failed to submit application. Please try again.' }
     }
 
-    // Note: Email notifications will be implemented in future iteration
+    // Send confirmation email to chef
+    const chefName = applicationData['Full Name'] as string
+    const chefEmail = applicationData['Email Address'] as string
+    
+    if (chefEmail && chefName) {
+      const confirmationResult = await sendApplicationConfirmationEmail(
+        chefEmail,
+        chefName,
+        application.id
+      )
+      
+      if (!confirmationResult.success) {
+        console.error('Failed to send confirmation email:', confirmationResult.error)
+        // Continue anyway - application is saved
+      }
+
+      // Send admin alert email
+      const adminAlertResult = await sendAdminApplicationAlert(
+        chefName,
+        chefEmail,
+        application.id
+      )
+      
+      if (!adminAlertResult.success) {
+        console.error('Failed to send admin alert email:', adminAlertResult.error)
+        // Continue anyway - application is saved
+      }
+    }
     
     // Revalidate admin page to show new application
     revalidatePath('/admin')
