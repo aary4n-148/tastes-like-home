@@ -264,7 +264,7 @@ export async function deleteReview(reviewId: string) {
  * Process:
  * 1. Validates application exists and is pending
  * 2. Creates chef record with verified=true
- * 3. Parses and inserts cuisine specialties
+ * 3. Parses and inserts best dishes
  * 4. Updates application status to approved
  * 5. Revalidates affected page caches
  */
@@ -315,9 +315,9 @@ export async function approveApplication(applicationId: string) {
       return { success: false, error: 'Failed to create chef profile' }
     }
 
-    // Add cuisine specialties
-    if (answers['Cuisine Specialties']) {
-      const cuisines = answers['Cuisine Specialties'].split(',').map((c: string) => c.trim())
+    // Add best dishes
+    if (answers['Best Dishes']) {
+      const cuisines = answers['Best Dishes'].split(',').map((c: string) => c.trim())
       
       const cuisineInserts = cuisines.map((cuisine: string) => ({
         chef_id: newChef.id,

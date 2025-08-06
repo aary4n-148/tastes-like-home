@@ -31,10 +31,33 @@ export default async function ApplyPage() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Apply to Become a Chef
           </h1>
-          <p className="text-lg text-gray-600 max-w-xl mx-auto">
-            Join our community of talented chefs and share your culinary skills with food lovers. 
+          <p className="text-lg text-gray-600 max-w-xl mx-auto mb-8">
+            Join our community of talented Indian chefs and share your culinary skills with food lovers. 
             We'll review your application within 48 hours.
           </p>
+          
+          {/* Why Each Field Matters */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-4xl mx-auto">
+            <h2 className="text-lg font-semibold text-blue-900 mb-4 text-center">💡 Why We Ask for This Information</h2>
+            <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-800">
+              <div>
+                <h3 className="font-medium mb-2">📸 Photos are crucial:</h3>
+                <p>High-quality photos help customers choose you over other chefs. Show your personality and your delicious food!</p>
+              </div>
+              <div>
+                <h3 className="font-medium mb-2">📝 Your bio matters:</h3>
+                <p>Tell your story! Customers want to know about your experience and what makes your cooking special.</p>
+              </div>
+              <div>
+                <h3 className="font-medium mb-2">💰 Competitive pricing:</h3>
+                <p>Set a fair rate that reflects your skills. Customers often compare prices when choosing chefs.</p>
+              </div>
+              <div>
+                <h3 className="font-medium mb-2">🍛 Best dishes:</h3>
+                <p>List your signature dishes that customers love most. This helps them know what to expect!</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Application Form */}
