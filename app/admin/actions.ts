@@ -490,4 +490,285 @@ export async function updateApplicationNotes(applicationId: string, notes: strin
     console.error('Error in updateApplicationNotes:', error)
     return { success: false, error: 'Failed to update notes' }
   }
+}
+
+// =============================================================================
+// CHEF MANAGEMENT ACTIONS
+// =============================================================================
+
+/**
+ * Update chef profile information (name, bio, phone, hourly_rate, location)
+ */
+export async function updateChefProfile(chefId: string, data: {
+  name: string
+  bio: string
+  phone: string
+  hourly_rate: number
+  location_label?: string
+}) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Update chef profile
+    const { error } = await supabase
+      .from('chefs')
+      .update({
+        name: data.name,
+        bio: data.bio,
+        phone: data.phone,
+        hourly_rate: data.hourly_rate,
+        location_label: data.location_label || null,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', chefId)
+
+    if (error) {
+      console.error('Error updating chef profile:', error)
+      return { success: false, error: error.message }
+    }
+
+    // Log the change
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: 'updated',
+        metadata: { fields: ['name', 'bio', 'phone', 'hourly_rate', 'location_label'] }
+      })
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath(`/admin/chefs/${chefId}`)
+    revalidatePath(`/chef/${chefId}`)
+    revalidatePath('/')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in updateChefProfile:', error)
+    return { success: false, error: 'Failed to update chef profile' }
+  }
+}
+
+/**
+ * Update chef cuisine specialties
+ */
+export async function updateChefCuisines(chefId: string, cuisines: string[]) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Delete existing cuisines
+    const { error: deleteError } = await supabase
+      .from('chef_cuisines')
+      .delete()
+      .eq('chef_id', chefId)
+
+    if (deleteError) {
+      console.error('Error deleting old cuisines:', deleteError)
+      return { success: false, error: deleteError.message }
+    }
+
+    // Insert new cuisines
+    if (cuisines.length > 0) {
+      const cuisineRows = cuisines.map(cuisine => ({
+        chef_id: chefId,
+        cuisine: cuisine.trim()
+      }))
+
+      const { error: insertError } = await supabase
+        .from('chef_cuisines')
+        .insert(cuisineRows)
+
+      if (insertError) {
+        console.error('Error inserting new cuisines:', insertError)
+        return { success: false, error: insertError.message }
+      }
+    }
+
+    // Update chef timestamp
+    await supabase
+      .from('chefs')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', chefId)
+
+    // Log the change
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: 'updated',
+        metadata: { field: 'cuisines', new_value: cuisines }
+      })
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath(`/admin/chefs/${chefId}`)
+    revalidatePath(`/chef/${chefId}`)
+    revalidatePath('/')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in updateChefCuisines:', error)
+    return { success: false, error: 'Failed to update chef cuisines' }
+  }
+}
+
+/**
+ * Update chef publication status (published/unpublished)
+ */
+export async function updateChefStatus(chefId: string, status: 'published' | 'unpublished') {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Update chef status (and sync with verified for backward compatibility)
+    const { error } = await supabase
+      .from('chefs')
+      .update({
+        status: status,
+        verified: status === 'published', // Keep verified in sync
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', chefId)
+
+    if (error) {
+      console.error('Error updating chef status:', error)
+      return { success: false, error: error.message }
+    }
+
+    // Log the change
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: status,
+        metadata: { previous_status: status === 'published' ? 'unpublished' : 'published' }
+      })
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath(`/admin/chefs/${chefId}`)
+    revalidatePath(`/chef/${chefId}`)
+    revalidatePath('/')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in updateChefStatus:', error)
+    return { success: false, error: 'Failed to update chef status' }
+  }
+}
+
+/**
+ * Delete a specific food photo
+ */
+export async function deleteChefPhoto(photoId: string, chefId: string) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Get photo details before deletion for cleanup
+    const { data: photo, error: fetchError } = await supabase
+      .from('food_photos')
+      .select('photo_url')
+      .eq('id', photoId)
+      .eq('chef_id', chefId)
+      .single()
+
+    if (fetchError || !photo) {
+      return { success: false, error: 'Photo not found' }
+    }
+
+    // Delete photo record from database
+    const { error: deleteError } = await supabase
+      .from('food_photos')
+      .delete()
+      .eq('id', photoId)
+      .eq('chef_id', chefId)
+
+    if (deleteError) {
+      console.error('Error deleting photo record:', deleteError)
+      return { success: false, error: deleteError.message }
+    }
+
+    // TODO: Delete actual file from storage
+    // This would involve extracting the file path from photo_url and using storage.remove()
+    // For now, we'll just log it for future implementation
+
+    // Update chef timestamp
+    await supabase
+      .from('chefs')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', chefId)
+
+    // Log the change
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: 'updated',
+        metadata: { field: 'food_photo_deleted', photo_url: photo.photo_url }
+      })
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath(`/admin/chefs/${chefId}`)
+    revalidatePath(`/chef/${chefId}`)
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in deleteChefPhoto:', error)
+    return { success: false, error: 'Failed to delete photo' }
+  }
+}
+
+/**
+ * Permanently delete a chef and all related data
+ */
+export async function deleteChefPermanently(chefId: string) {
+  try {
+    const supabase = createSupabaseAdminClient()
+
+    // Get chef details for logging
+    const { data: chef, error: fetchError } = await supabase
+      .from('chefs')
+      .select('name, photo_url')
+      .eq('id', chefId)
+      .single()
+
+    if (fetchError || !chef) {
+      return { success: false, error: 'Chef not found' }
+    }
+
+    // Log the deletion before it happens
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: 'deleted',
+        metadata: { chef_name: chef.name, deletion_type: 'permanent' }
+      })
+
+    // Delete chef record (cascades to related tables due to foreign key constraints)
+    const { error: deleteError } = await supabase
+      .from('chefs')
+      .delete()
+      .eq('id', chefId)
+
+    if (deleteError) {
+      console.error('Error deleting chef:', deleteError)
+      return { success: false, error: deleteError.message }
+    }
+
+    // TODO: Delete associated files from storage
+    // This would involve:
+    // 1. Deleting profile photo from storage
+    // 2. Deleting all food photos from storage
+    // For now, we'll just log it for future implementation
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath('/')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in deleteChefPermanently:', error)
+    return { success: false, error: 'Failed to delete chef' }
+  }
 } 
