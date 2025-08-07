@@ -3,9 +3,11 @@
 import { ApprovalButton } from "@/components/approval-button"
 import { ReviewActions } from "@/components/admin/review-actions"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { fetchAdminData } from "@/app/admin/actions"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { Edit, ExternalLink } from "lucide-react"
 
 interface Chef {
   id: string
@@ -429,20 +431,40 @@ export default function AdminPage() {
           
           <div className="bg-white rounded-lg shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200">
-              <p className="text-sm text-gray-600">These chefs are live on your website</p>
+              <p className="text-sm text-gray-600">These chefs are live on your website. Click "Edit" to manage their profiles.</p>
             </div>
             <div className="divide-y divide-gray-200">
               {verifiedChefs.map(chef => (
                 <div key={chef.id} className="px-6 py-4 flex items-center justify-between">
-                  <div>
+                  <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{chef.name}</h4>
                     <p className="text-sm text-gray-500">
                       {chef.chef_cuisines?.map(c => c.cuisine).join(', ')} • £{chef.hourly_rate}/hour
                     </p>
                   </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Live
-                  </Badge>
+                  <div className="flex items-center gap-3">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      Live
+                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Link 
+                        href={`/chef/${chef.id}`}
+                        target="_blank"
+                        className="text-blue-600 hover:text-blue-700"
+                      >
+                        <Button variant="outline" size="sm">
+                          <ExternalLink className="w-4 h-4 mr-1" />
+                          View
+                        </Button>
+                      </Link>
+                      <Link href={`/admin/chefs/${chef.id}`}>
+                        <Button variant="outline" size="sm">
+                          <Edit className="w-4 h-4 mr-1" />
+                          Edit
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

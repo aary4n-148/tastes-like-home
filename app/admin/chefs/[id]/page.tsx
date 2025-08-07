@@ -2,14 +2,16 @@ import { createSupabaseAdminClient } from '@/lib/supabase-admin'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { ArrowLeft, Save, Eye, EyeOff, Trash2, Upload, X } from 'lucide-react'
+import { ArrowLeft, Eye, EyeOff, Trash2, Upload, X } from 'lucide-react'
+import ChefProfileForm from '@/components/admin/chef-profile-form'
+import ChefCuisinesForm from '@/components/admin/chef-cuisines-form'
+import ChefStatusForm from '@/components/admin/chef-status-form'
+import ChefDeleteForm from '@/components/admin/chef-delete-form'
+import ChefPhotoUpload from '@/components/admin/chef-photo-upload'
 
 /**
  * Chef Editor Page
@@ -138,105 +140,32 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
             {/* Contact Information Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  Contact Information
-                  <Button size="sm" variant="outline">
-                    <Save className="w-4 h-4 mr-1" />
-                    Save Changes
-                  </Button>
-                </CardTitle>
+                <CardTitle>Contact Information</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input 
-                      id="name" 
-                      defaultValue={chef.name}
-                      placeholder="Chef's full name"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input 
-                      id="phone" 
-                      defaultValue={chef.phone || ''}
-                      placeholder="+44 7XXX XXXXXX"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="hourly_rate">Hourly Rate (£)</Label>
-                    <Input 
-                      id="hourly_rate" 
-                      type="number" 
-                      step="0.50"
-                      defaultValue={chef.hourly_rate || ''}
-                      placeholder="15.00"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="location">Location</Label>
-                    <Input 
-                      id="location" 
-                      defaultValue={chef.location_label || ''}
-                      placeholder="e.g., West London"
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="bio">Bio / About</Label>
-                  <Textarea 
-                    id="bio" 
-                    defaultValue={chef.bio || ''}
-                    placeholder="Tell customers about this chef's background, specialties, and cooking style..."
-                    rows={4}
-                  />
-                </div>
+              <CardContent>
+                <ChefProfileForm 
+                  chefId={chef.id}
+                  initialData={{
+                    name: chef.name,
+                    phone: chef.phone || '',
+                    hourly_rate: chef.hourly_rate || 0,
+                    location_label: chef.location_label || '',
+                    bio: chef.bio || ''
+                  }}
+                />
               </CardContent>
             </Card>
 
             {/* Cuisines Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  Cuisine Specialties
-                  <Button size="sm" variant="outline">
-                    <Save className="w-4 h-4 mr-1" />
-                    Update Cuisines
-                  </Button>
-                </CardTitle>
+                <CardTitle>Cuisine Specialties</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {cuisines.map((cuisine, index) => (
-                      <Badge 
-                        key={index} 
-                        variant="secondary"
-                        className="flex items-center gap-1 bg-orange-100 text-orange-700"
-                      >
-                        {cuisine}
-                        <X className="w-3 h-3 ml-1 cursor-pointer hover:text-red-600" />
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Input 
-                      placeholder="Add new cuisine (e.g., Punjabi, Italian)"
-                      className="flex-1"
-                    />
-                    <Button variant="outline">Add</Button>
-                  </div>
-                  
-                  <p className="text-sm text-gray-500">
-                    Common cuisines: Punjabi, Gujarati, South Indian, Italian, Chinese, Thai, Mediterranean
-                  </p>
-                </div>
+                <ChefCuisinesForm 
+                  chefId={chef.id}
+                  initialCuisines={cuisines}
+                />
               </CardContent>
             </Card>
 
@@ -245,76 +174,12 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
               <CardHeader>
                 <CardTitle>Photos Management</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                
-                {/* Profile Photo */}
-                <div>
-                  <h4 className="font-medium text-gray-900 mb-3">Profile Photo</h4>
-                  <div className="flex items-start gap-4">
-                    <div className="relative">
-                      <Image
-                        src={chef.photo_url || '/placeholder-user.jpg'}
-                        alt={chef.name}
-                        width={120}
-                        height={120}
-                        className="rounded-lg object-cover border"
-                      />
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <Button variant="outline" size="sm">
-                        <Upload className="w-4 h-4 mr-1" />
-                        Replace Photo
-                      </Button>
-                      <p className="text-sm text-gray-500">
-                        Recommended: Square image, at least 400x400px
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Food Photos */}
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium text-gray-900">Food Photos</h4>
-                    <Button variant="outline" size="sm">
-                      <Upload className="w-4 h-4 mr-1" />
-                      Add Photos
-                    </Button>
-                  </div>
-                  
-                  {foodPhotos.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {foodPhotos.map((photo, index) => (
-                        <div key={photo.id} className="relative group">
-                          <Image
-                            src={photo.photo_url}
-                            alt={`Food photo ${index + 1}`}
-                            width={200}
-                            height={200}
-                            className="rounded-lg object-cover border aspect-square"
-                          />
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <X className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500">No food photos uploaded yet</p>
-                      <Button variant="outline" size="sm" className="mt-2">
-                        Upload First Photo
-                      </Button>
-                    </div>
-                  )}
-                </div>
+              <CardContent>
+                <ChefPhotoUpload 
+                  chefId={chef.id}
+                  currentProfilePhoto={chef.photo_url}
+                  foodPhotos={foodPhotos}
+                />
               </CardContent>
             </Card>
           </div>
@@ -327,28 +192,11 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
               <CardHeader>
                 <CardTitle>Publication Status</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <Button 
-                    className={`w-full ${chef.status === 'published' ? 'bg-green-600 hover:bg-green-700' : ''}`}
-                    variant={chef.status === 'published' ? 'default' : 'outline'}
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    Published (Visible)
-                  </Button>
-                  
-                  <Button 
-                    className="w-full"
-                    variant={chef.status === 'unpublished' ? 'default' : 'outline'}
-                  >
-                    <EyeOff className="w-4 h-4 mr-2" />
-                    Unpublished (Hidden)
-                  </Button>
-                </div>
-                
-                <p className="text-xs text-gray-500">
-                  Published chefs appear on the website and in search results.
-                </p>
+              <CardContent>
+                <ChefStatusForm 
+                  chefId={chef.id}
+                  currentStatus={chef.status as 'published' | 'unpublished' | 'deleted'}
+                />
               </CardContent>
             </Card>
 
@@ -379,14 +227,10 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
                 <CardTitle className="text-red-700">Danger Zone</CardTitle>
               </CardHeader>
               <CardContent>
-                <Button 
-                  variant="destructive" 
-                  className="w-full"
-                  size="sm"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Delete Chef Permanently
-                </Button>
+                <ChefDeleteForm 
+                  chefId={chef.id}
+                  chefName={chef.name}
+                />
                 <p className="text-xs text-gray-500 mt-2">
                   This action cannot be undone. All data and photos will be removed.
                 </p>

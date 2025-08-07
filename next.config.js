@@ -9,6 +9,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb', // Increase body size limit for file uploads
+    },
+  },
 };
 
 module.exports = nextConfig;

@@ -771,4 +771,205 @@ export async function deleteChefPermanently(chefId: string) {
     console.error('Error in deleteChefPermanently:', error)
     return { success: false, error: 'Failed to delete chef' }
   }
+}
+
+/**
+ * Replace chef profile photo
+ */
+export async function replaceChefProfilePhoto(chefId: string, formData: FormData) {
+  try {
+    const supabase = createSupabaseAdminClient()
+    const file = formData.get('photo') as File
+
+    if (!file || file.size === 0) {
+      return { success: false, error: 'No file provided' }
+    }
+
+    // Validate file type and size
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      return { success: false, error: 'Invalid file type. Please upload JPEG, PNG, or WebP images.' }
+    }
+
+    if (file.size > 25 * 1024 * 1024) { // 25MB limit
+      return { success: false, error: 'File too large. Please upload images smaller than 25MB.' }
+    }
+
+    // Generate unique filename with more entropy
+    const fileExt = file.name.split('.').pop()
+    const timestamp = Date.now()
+    const random = Math.random().toString(36).substring(2, 15)
+    const fileName = `chefs/${chefId}/profile/${timestamp}_${random}.${fileExt}`
+
+    // Upload to storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('chef-applications')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: true
+      })
+
+    if (uploadError) {
+      console.error('Storage upload error:', uploadError)
+      console.error('File details:', { name: file.name, size: file.size, type: file.type })
+      return { success: false, error: `Failed to upload photo. ${uploadError.message || 'Please try again.'}` }
+    }
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('chef-applications')
+      .getPublicUrl(fileName)
+
+    // Update chef record
+    const { error: updateError } = await supabase
+      .from('chefs')
+      .update({
+        photo_url: urlData.publicUrl,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', chefId)
+
+    if (updateError) {
+      console.error('Error updating chef photo URL:', updateError)
+      return { success: false, error: updateError.message }
+    }
+
+    // Log the change
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: 'updated',
+        metadata: { field: 'profile_photo', new_value: urlData.publicUrl }
+      })
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath(`/admin/chefs/${chefId}`)
+    revalidatePath(`/chef/${chefId}`)
+    revalidatePath('/')
+
+    return { success: true, photo_url: urlData.publicUrl }
+  } catch (error) {
+    console.error('Error in replaceChefProfilePhoto:', error)
+    return { success: false, error: 'Failed to replace profile photo' }
+  }
+}
+
+/**
+ * Add food photos to chef profile
+ */
+export async function addChefFoodPhotos(chefId: string, formData: FormData) {
+  try {
+    const supabase = createSupabaseAdminClient()
+    const files = formData.getAll('photos') as File[]
+
+    if (!files || files.length === 0) {
+      return { success: false, error: 'No files provided' }
+    }
+
+    // Validate files
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+    const maxFileSize = 25 * 1024 * 1024 // 25MB
+
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        return { success: false, error: `Invalid file type for ${file.name}. Please upload JPEG, PNG, or WebP images.` }
+      }
+      if (file.size > maxFileSize) {
+        return { success: false, error: `File ${file.name} is too large. Please upload images smaller than 25MB.` }
+      }
+    }
+
+    const uploadedPhotos = []
+
+    // Upload each file
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const fileExt = file.name.split('.').pop()
+      const timestamp = Date.now()
+      const random = Math.random().toString(36).substring(2, 15)
+      const fileName = `chefs/${chefId}/food/${timestamp}_${random}_${i}.${fileExt}`
+
+      // Upload to storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('chef-applications')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        })
+
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError)
+        console.error('File details:', { name: file.name, size: file.size, type: file.type })
+        return { success: false, error: `Failed to upload ${file.name}. ${uploadError.message || 'Please try again.'}` }
+      }
+
+      // Small delay between uploads to prevent overwhelming the server
+      if (i < files.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 100))
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('chef-applications')
+        .getPublicUrl(fileName)
+
+      uploadedPhotos.push({
+        photo_url: urlData.publicUrl,
+        display_order: i
+      })
+    }
+
+    // Get current max display order
+    const { data: maxOrderData } = await supabase
+      .from('food_photos')
+      .select('display_order')
+      .eq('chef_id', chefId)
+      .order('display_order', { ascending: false })
+      .limit(1)
+
+    const maxOrder = maxOrderData?.[0]?.display_order || 0
+
+    // Insert photo records
+    const photoRecords = uploadedPhotos.map((photo, index) => ({
+      chef_id: chefId,
+      photo_url: photo.photo_url,
+      display_order: maxOrder + index + 1
+    }))
+
+    const { error: insertError } = await supabase
+      .from('food_photos')
+      .insert(photoRecords)
+
+    if (insertError) {
+      console.error('Error inserting photo records:', insertError)
+      return { success: false, error: insertError.message }
+    }
+
+    // Update chef timestamp
+    await supabase
+      .from('chefs')
+      .update({ updated_at: new Date().toISOString() })
+      .eq('id', chefId)
+
+    // Log the change
+    await supabase
+      .from('chef_audit_log')
+      .insert({
+        chef_id: chefId,
+        action: 'updated',
+        metadata: { field: 'food_photos_added', count: files.length }
+      })
+
+    // Revalidate relevant pages
+    revalidatePath('/admin')
+    revalidatePath(`/admin/chefs/${chefId}`)
+    revalidatePath(`/chef/${chefId}`)
+
+    return { success: true, uploaded_count: files.length }
+  } catch (error) {
+    console.error('Error in addChefFoodPhotos:', error)
+    return { success: false, error: 'Failed to add food photos' }
+  }
 } 
