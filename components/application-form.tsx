@@ -92,11 +92,24 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
 
     switch (question.field_type) {
       case 'text':
+        // Special handling for enhanced text fields with better placeholders
+        let placeholder = question.hint_text || `Enter your ${question.text.toLowerCase()}`
+        
+        if (question.text === 'Availability') {
+          placeholder = "Example: Monday-Friday evenings, Weekends all day"
+        } else if (question.text === 'Languages Spoken') {
+          placeholder = "Example: English, Hindi, Punjabi, Gujarati"
+        } else if (question.text === 'Frequency Preference') {
+          placeholder = "Example: Weekly bookings preferred, one-off events welcome"
+        } else if (question.text === 'Dietary Specialties') {
+          placeholder = "Example: Vegan, Jain, Gluten-free, Low-oil cooking"
+        }
+        
         return (
           <Input
             {...commonProps}
             type="text"
-            placeholder={question.hint_text || `Enter your ${question.text.toLowerCase()}`}
+            placeholder={placeholder}
           />
         )
       
@@ -119,13 +132,29 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         )
       
       case 'number':
+        // Special handling for enhanced number fields
+        let numPlaceholder = question.hint_text || 'Enter amount'
+        let minValue = "1"
+        let stepValue = "0.01"
+        
+        if (question.text === 'Experience Years') {
+          numPlaceholder = "Example: 5 (years of cooking experience)"
+          stepValue = "1"
+        } else if (question.text === 'Travel Distance') {
+          numPlaceholder = "Example: 10 (miles you're willing to travel)"
+          stepValue = "1"
+        } else if (question.text === 'Minimum Booking') {
+          numPlaceholder = "Example: 3 (minimum hours per booking)"
+          stepValue = "1"
+        }
+        
         return (
           <Input
             {...commonProps}
             type="number"
-            min="1"
-            step="0.01"
-            placeholder={question.hint_text || 'Enter amount'}
+            min={minValue}
+            step={stepValue}
+            placeholder={numPlaceholder}
           />
         )
       
@@ -143,6 +172,41 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
                 <p className="text-sm text-yellow-800">
                   <strong>💡 Format:</strong> List your signature dishes separated by commas.<br/>
                   <strong>Example:</strong> "Butter Chicken, Chicken Biryani, Vegetable Samosas, Tarka Dhal, Garlic Naan"
+                </p>
+              </div>
+            </div>
+          )
+        }
+        
+        // Special handling for enhanced fields with helpful examples
+        if (question.text === 'Special Events') {
+          return (
+            <div className="space-y-3">
+              <Textarea
+                {...commonProps}
+                rows={3}
+                placeholder="Example: Birthday parties, Wedding celebrations, Anniversary dinners, Family gatherings"
+              />
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-sm text-blue-800">
+                  <strong>💡 Tip:</strong> List the types of special events you enjoy cooking for - this helps customers find you for their celebrations!
+                </p>
+              </div>
+            </div>
+          )
+        }
+        
+        if (question.text === 'House Help Services') {
+          return (
+            <div className="space-y-3">
+              <Textarea
+                {...commonProps}
+                rows={3}
+                placeholder="Example: Kitchen cleaning, Grocery shopping, Basic meal prep, Dishwashing"
+              />
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <p className="text-sm text-green-800">
+                  <strong>💡 Optional:</strong> Additional services can help you earn more! Only list what you're comfortable doing.
                 </p>
               </div>
             </div>
