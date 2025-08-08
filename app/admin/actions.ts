@@ -306,6 +306,16 @@ export async function approveApplication(applicationId: string) {
         hourly_rate: answers['Hourly Rate (£)'],
         photo_url: photoUrl, // Use uploaded profile photo
         verified: true, // Auto-approve when created from application
+        // Enhanced fields from application
+        experience_years: answers['Experience Years'],
+        availability: answers['Availability'],
+        languages_spoken: answers['Languages Spoken'],
+        travel_distance: answers['Travel Distance'],
+        frequency_preference: answers['Frequency Preference'],
+        minimum_booking: answers['Minimum Booking'],
+        special_events: answers['Special Events'],
+        house_help_services: answers['House Help Services'],
+        dietary_specialties: answers['Dietary Specialties'],
       })
       .select('id')
       .single()

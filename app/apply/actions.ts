@@ -55,8 +55,9 @@ export async function submitApplication(formData: FormData): Promise<SubmissionR
         continue
       }
       if (typeof value === 'string' && value.trim()) {
-        // Convert hourly rate to number if it's the rate field
-        if (key.toLowerCase().includes('rate') && !isNaN(Number(value))) {
+        // Convert numeric fields to numbers
+        const numericFields = ['Hourly Rate (£)', 'Experience Years', 'Travel Distance', 'Minimum Booking']
+        if (numericFields.includes(key) && !isNaN(Number(value))) {
           applicationData[key] = Number(value)
         } else {
           applicationData[key] = value.trim()
