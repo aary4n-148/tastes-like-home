@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -37,8 +38,9 @@ interface ApplicationFormProps {
 }
 
 export default function ApplicationForm({ questions }: ApplicationFormProps) {
+  const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'error'; message: string } | null>(null)
   const [uploadedFiles, setUploadedFiles] = useState<{
     profile_photos: FileUploadResult[]
     food_photos: FileUploadResult[]
@@ -53,19 +55,14 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
     setSubmitStatus(null)
 
     try {
-      // Add uploaded file information to form data
+      // Add uploaded file information to form data before submission
       formData.append('file_uploads', JSON.stringify(uploadedFiles))
       
       const result = await submitApplication(formData)
       
       if (result.success) {
-        setSubmitStatus({ 
-          type: 'success', 
-          message: 'Application submitted successfully! We\'ll review it within 48 hours and send you an email.' 
-        })
-        // Reset form
-        const form = document.getElementById('application-form') as HTMLFormElement
-        form?.reset()
+        // Redirect to success page using router
+        router.push('/apply/success')
       } else {
         setSubmitStatus({ 
           type: 'error', 
@@ -261,13 +258,9 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
 
   return (
     <form id="application-form" action={handleSubmit} className="space-y-6">
-      {/* Status Messages */}
+      {/* Error Messages */}
       {submitStatus && (
-        <div className={`p-4 rounded-lg ${
-          submitStatus.type === 'success' 
-            ? 'bg-green-50 text-green-800 border border-green-200' 
-            : 'bg-red-50 text-red-800 border border-red-200'
-        }`}>
+        <div className="p-4 rounded-lg bg-red-50 text-red-800 border border-red-200">
           {submitStatus.message}
         </div>
       )}
