@@ -774,7 +774,53 @@ export async function deleteChefPermanently(chefId: string) {
         metadata: { chef_name: chef.name, deletion_type: 'permanent' }
       })
 
-    // Delete chef record (cascades to related tables due to foreign key constraints)
+    // Delete related records in correct order to avoid foreign key constraint violations
+    
+    // 1. Delete chef applications that reference this chef
+    const { error: applicationsError } = await supabase
+      .from('chef_applications')
+      .delete()
+      .eq('chef_id', chefId)
+
+    if (applicationsError) {
+      console.error('Error deleting chef applications:', applicationsError)
+      return { success: false, error: 'Failed to delete chef applications' }
+    }
+
+    // 2. Delete reviews for this chef
+    const { error: reviewsError } = await supabase
+      .from('reviews')
+      .delete()
+      .eq('chef_id', chefId)
+
+    if (reviewsError) {
+      console.error('Error deleting reviews:', reviewsError)
+      return { success: false, error: 'Failed to delete reviews' }
+    }
+
+    // 3. Delete food photos
+    const { error: foodPhotosError } = await supabase
+      .from('food_photos')
+      .delete()
+      .eq('chef_id', chefId)
+
+    if (foodPhotosError) {
+      console.error('Error deleting food photos:', foodPhotosError)
+      return { success: false, error: 'Failed to delete food photos' }
+    }
+
+    // 4. Delete chef cuisines
+    const { error: cuisinesError } = await supabase
+      .from('chef_cuisines')
+      .delete()
+      .eq('chef_id', chefId)
+
+    if (cuisinesError) {
+      console.error('Error deleting chef cuisines:', cuisinesError)
+      return { success: false, error: 'Failed to delete chef cuisines' }
+    }
+
+    // 5. Finally, delete the chef record
     const { error: deleteError } = await supabase
       .from('chefs')
       .delete()
