@@ -66,15 +66,15 @@ export default function ChefDeleteForm({ chefId, chefName }: ChefDeleteFormProps
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Chef Permanently</AlertDialogTitle>
           <AlertDialogDescription className="space-y-2">
-            <p>
+            <div>
               Are you sure you want to permanently delete <strong>{chefName}</strong>?
-            </p>
-            <p className="text-sm text-red-600">
+            </div>
+            <div className="text-sm text-red-600">
               This action cannot be undone. All chef data, photos, reviews, and related information will be permanently removed.
-            </p>
-            <p className="text-sm">
+            </div>
+            <div className="text-sm">
               Consider unpublishing the chef instead if you want to hide them temporarily.
-            </p>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
