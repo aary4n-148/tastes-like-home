@@ -47,6 +47,15 @@ export default async function ChefPage({ params }: ChefPageProps) {
       photo_url,
       location_label,
       location,
+      experience_years,
+      availability,
+      languages_spoken,
+      travel_distance,
+      frequency_preference,
+      minimum_booking,
+      special_events,
+      house_help_services,
+      dietary_specialties,
       chef_cuisines(cuisine),
       food_photos(photo_url, display_order)
     `)
@@ -54,17 +63,7 @@ export default async function ChefPage({ params }: ChefPageProps) {
     .eq('verified', true) // Only show verified chefs
     .single()
 
-  // Fetch enhanced application data for this chef - simplified query
-  const { data: allApplications, error: appError } = await supabase
-    .from('chef_applications')
-    .select('answers, chef_id, status')
-    .eq('chef_id', id)
-  
-  // Find the approved application manually
-  const applicationRecord = allApplications?.find(app => app.status === 'approved') || null
-  const applicationData = applicationRecord?.answers || null
-
-  // Success! Data is now flowing through correctly
+  // Enhanced data is now stored directly in the chef table
 
   if (error || !chefData) {
     console.error('Error fetching chef:', error)
@@ -88,9 +87,6 @@ export default async function ChefPage({ params }: ChefPageProps) {
     .eq('chef_id', id)
     .single()
 
-  // Extract enhanced data from application
-  const enhancedData = applicationData || {}
-
   // Transform database data to match expected format
   const chef = {
     id: chefData.id,
@@ -110,16 +106,16 @@ export default async function ChefPage({ params }: ChefPageProps) {
     // Add rating data from materialized view
     avgRating: ratingStats?.avg_rating || undefined,
     reviewCount: ratingStats?.review_count || undefined,
-    // Enhanced profile data
-    experienceYears: enhancedData['Experience Years'] || null,
-    availability: enhancedData['Availability'] || null,
-    frequencyPreference: enhancedData['Frequency Preference'] || null,
-    languagesSpoken: enhancedData['Languages Spoken'] || null,
-    travelDistance: enhancedData['Travel Distance'] || null,
-    specialEvents: enhancedData['Special Events'] || null,
-    houseHelpServices: enhancedData['House Help Services'] || null,
-    dietarySpecialties: enhancedData['Dietary Specialties'] || null,
-    minimumBooking: enhancedData['Minimum Booking'] || null
+    // Enhanced profile data from chef table
+    experienceYears: chefData.experience_years || null,
+    availability: chefData.availability || null,
+    frequencyPreference: chefData.frequency_preference || null,
+    languagesSpoken: chefData.languages_spoken || null,
+    travelDistance: chefData.travel_distance || null,
+    specialEvents: chefData.special_events || null,
+    houseHelpServices: chefData.house_help_services || null,
+    dietarySpecialties: chefData.dietary_specialties || null,
+    minimumBooking: chefData.minimum_booking || null
   }
 
   // Data successfully flowing through! 🎉
@@ -148,9 +144,9 @@ export default async function ChefPage({ params }: ChefPageProps) {
                   {images.map((src) => (
                     <CarouselItem key={src}>
                       <div className="relative w-full h-64 md:h-80 lg:h-[500px] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-                        <Image
-                          src={src}
-                          alt={chef.name}
+                      <Image
+                        src={src}
+                        alt={chef.name}
                           fill
                           className="object-cover object-center"
                           sizes="(max-width: 1024px) 100vw, 40vw"

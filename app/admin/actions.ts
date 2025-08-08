@@ -506,6 +506,15 @@ export async function updateChefProfile(chefId: string, data: {
   phone: string
   hourly_rate: number
   location_label?: string
+  experience_years?: number
+  availability?: string
+  languages_spoken?: string
+  travel_distance?: number
+  frequency_preference?: string
+  minimum_booking?: number
+  special_events?: string
+  house_help_services?: string
+  dietary_specialties?: string
 }) {
   try {
     const supabase = createSupabaseAdminClient()
@@ -519,6 +528,15 @@ export async function updateChefProfile(chefId: string, data: {
         phone: data.phone,
         hourly_rate: data.hourly_rate,
         location_label: data.location_label || null,
+        experience_years: data.experience_years || null,
+        availability: data.availability || null,
+        languages_spoken: data.languages_spoken || null,
+        travel_distance: data.travel_distance || null,
+        frequency_preference: data.frequency_preference || null,
+        minimum_booking: data.minimum_booking || null,
+        special_events: data.special_events || null,
+        house_help_services: data.house_help_services || null,
+        dietary_specialties: data.dietary_specialties || null,
         updated_at: new Date().toISOString()
       })
       .eq('id', chefId)

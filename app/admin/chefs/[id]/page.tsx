@@ -40,7 +40,7 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
   const { id } = await params
   const supabase = createSupabaseAdminClient()
 
-  // Fetch chef data with all related information
+  // Fetch chef data with all related information including enhanced fields
   const { data: chef, error: chefError } = await supabase
     .from('chefs')
     .select(`
@@ -53,6 +53,15 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
       status,
       photo_url,
       location_label,
+      experience_years,
+      availability,
+      languages_spoken,
+      travel_distance,
+      frequency_preference,
+      minimum_booking,
+      special_events,
+      house_help_services,
+      dietary_specialties,
       created_at,
       updated_at,
       updated_by,
@@ -65,6 +74,8 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
   if (chefError || !chef) {
     notFound()
   }
+
+  // Enhanced data is now stored directly in the chefs table - no need to fetch from applications
 
   // Fetch recent audit log entries for this chef
   const { data: auditLogs } = await supabase
@@ -150,7 +161,16 @@ export default async function ChefEditorPage({ params }: ChefEditorPageProps) {
                     phone: chef.phone || '',
                     hourly_rate: chef.hourly_rate || 0,
                     location_label: chef.location_label || '',
-                    bio: chef.bio || ''
+                    bio: chef.bio || '',
+                    experience_years: chef.experience_years,
+                    availability: chef.availability,
+                    languages_spoken: chef.languages_spoken,
+                    travel_distance: chef.travel_distance,
+                    frequency_preference: chef.frequency_preference,
+                    minimum_booking: chef.minimum_booking,
+                    special_events: chef.special_events,
+                    house_help_services: chef.house_help_services,
+                    dietary_specialties: chef.dietary_specialties
                   }}
                 />
               </CardContent>
