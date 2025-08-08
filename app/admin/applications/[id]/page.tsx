@@ -133,6 +133,80 @@ export default async function ApplicationReviewPage({ params }: ApplicationPageP
               </div>
             </div>
 
+            {/* Enhanced Chef Information */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Professional Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Experience Years</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Experience Years'] ? `${answers['Experience Years']} years` : 'Not specified'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Availability'] || 'Not specified'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Languages Spoken</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Languages Spoken'] || 'Not specified'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Travel Distance</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Travel Distance'] ? `${answers['Travel Distance']} miles` : 'Not specified'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Frequency Preference</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Frequency Preference'] || 'Not specified'}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Booking</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Minimum Booking'] ? `${answers['Minimum Booking']} hours` : 'Not specified'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Services */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Additional Services & Specialties</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Special Events</label>
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <p className="text-gray-900">
+                      {answers['Special Events'] || 'Not specified'}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">House Help Services</label>
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <p className="text-gray-900">
+                      {answers['House Help Services'] || 'Not specified'}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Dietary Specialties</label>
+                  <div className="bg-gray-50 p-3 rounded-md">
+                    <p className="text-gray-900">
+                      {answers['Dietary Specialties'] || 'Not specified'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Photo Uploads */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Photos</h2>

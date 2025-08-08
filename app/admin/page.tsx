@@ -193,7 +193,9 @@ export default function AdminPage() {
                           <p><strong>Email:</strong> {application.answers['Email Address'] || 'Not provided'}</p>
                           <p><strong>Phone:</strong> {application.answers['Phone Number'] || 'Not provided'}</p>
                           <p><strong>Hourly Rate:</strong> £{application.answers['Hourly Rate (£)'] || 'Not specified'}/hour</p>
+                          <p><strong>Experience:</strong> {application.answers['Experience Years'] ? `${application.answers['Experience Years']} years` : 'Not specified'}</p>
                           <p><strong>Cuisines:</strong> {application.answers['Cuisine Specialties'] || 'Not specified'}</p>
+                          <p><strong>Languages:</strong> {application.answers['Languages Spoken'] || 'Not specified'}</p>
                           <p><strong>Applied:</strong> {new Date(application.created_at).toLocaleDateString()}</p>
                         </div>
                         {application.answers['Bio/About You'] && (
