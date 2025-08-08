@@ -352,13 +352,14 @@ export async function approveApplication(applicationId: string) {
       }
     }
 
-    // Update application status
+    // Update application status and link to chef
     const { error: updateError } = await supabase
       .from('chef_applications')
       .update({
         status: 'approved',
         approved_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        chef_id: newChef.id // Link application to created chef
       })
       .eq('id', applicationId)
 

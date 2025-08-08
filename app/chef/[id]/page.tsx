@@ -54,15 +54,13 @@ export default async function ChefPage({ params }: ChefPageProps) {
     .eq('verified', true) // Only show verified chefs
     .single()
 
-  // Fetch enhanced application data for this chef (for demo purposes, using chef name to match)
+  // Fetch enhanced application data for this chef using proper foreign key relationship
   const { data: applicationData, error: appError } = await supabase
     .from('chef_applications')
     .select('answers')
+    .eq('chef_id', id)
     .eq('status', 'approved')
-    .ilike('answers->>Full Name', `%${chefData?.name || ''}%`)
     .single()
-
-  // TODO: Fix database query to match actual chef names with application data
 
   if (error || !chefData) {
     console.error('Error fetching chef:', error)
@@ -88,22 +86,6 @@ export default async function ChefPage({ params }: ChefPageProps) {
 
   // Extract enhanced data from application
   const enhancedData = applicationData?.answers || {}
-  
-  // Fallback data for testing (remove this later)
-  const fallbackData = {
-    'Experience Years': 8,
-    'Availability': 'Any time, three days a week',
-    'Frequency Preference': 'Weekly, three times per week',
-    'Languages Spoken': 'Punjabi, Hindi, basic English',
-    'Travel Distance': 8,
-    'Special Events': 'Family gatherings, religious occasions',
-    'House Help Services': 'Kitchen cleaning, light tidying while cooking',
-    'Dietary Specialties': 'Vegetarian, Jain-friendly on request',
-    'Minimum Booking': 3
-  }
-  
-  // Use fallback data if no application data found
-  const finalEnhancedData = Object.keys(enhancedData).length > 0 ? enhancedData : fallbackData
 
   // Transform database data to match expected format
   const chef = {
@@ -125,15 +107,15 @@ export default async function ChefPage({ params }: ChefPageProps) {
     avgRating: ratingStats?.avg_rating || undefined,
     reviewCount: ratingStats?.review_count || undefined,
     // Enhanced profile data
-    experienceYears: finalEnhancedData['Experience Years'] || null,
-    availability: finalEnhancedData['Availability'] || null,
-    frequencyPreference: finalEnhancedData['Frequency Preference'] || null,
-    languagesSpoken: finalEnhancedData['Languages Spoken'] || null,
-    travelDistance: finalEnhancedData['Travel Distance'] || null,
-    specialEvents: finalEnhancedData['Special Events'] || null,
-    houseHelpServices: finalEnhancedData['House Help Services'] || null,
-    dietarySpecialties: finalEnhancedData['Dietary Specialties'] || null,
-    minimumBooking: finalEnhancedData['Minimum Booking'] || null
+    experienceYears: enhancedData['Experience Years'] || null,
+    availability: enhancedData['Availability'] || null,
+    frequencyPreference: enhancedData['Frequency Preference'] || null,
+    languagesSpoken: enhancedData['Languages Spoken'] || null,
+    travelDistance: enhancedData['Travel Distance'] || null,
+    specialEvents: enhancedData['Special Events'] || null,
+    houseHelpServices: enhancedData['House Help Services'] || null,
+    dietarySpecialties: enhancedData['Dietary Specialties'] || null,
+    minimumBooking: enhancedData['Minimum Booking'] || null
   }
 
   const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
