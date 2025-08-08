@@ -54,13 +54,17 @@ export default async function ChefPage({ params }: ChefPageProps) {
     .eq('verified', true) // Only show verified chefs
     .single()
 
-  // Fetch enhanced application data for this chef using proper foreign key relationship
-  const { data: applicationData, error: appError } = await supabase
+  // Fetch enhanced application data for this chef - simplified query
+  const { data: allApplications, error: appError } = await supabase
     .from('chef_applications')
-    .select('answers')
+    .select('answers, chef_id, status')
     .eq('chef_id', id)
-    .eq('status', 'approved')
-    .single()
+  
+  // Find the approved application manually
+  const applicationRecord = allApplications?.find(app => app.status === 'approved') || null
+  const applicationData = applicationRecord?.answers || null
+
+  // Success! Data is now flowing through correctly
 
   if (error || !chefData) {
     console.error('Error fetching chef:', error)
@@ -85,7 +89,7 @@ export default async function ChefPage({ params }: ChefPageProps) {
     .single()
 
   // Extract enhanced data from application
-  const enhancedData = applicationData?.answers || {}
+  const enhancedData = applicationData || {}
 
   // Transform database data to match expected format
   const chef = {
@@ -117,6 +121,8 @@ export default async function ChefPage({ params }: ChefPageProps) {
     dietarySpecialties: enhancedData['Dietary Specialties'] || null,
     minimumBooking: enhancedData['Minimum Booking'] || null
   }
+
+  // Data successfully flowing through! 🎉
 
   const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
 
