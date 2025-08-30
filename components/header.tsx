@@ -8,21 +8,16 @@ export default function Header() {
       <div className="container mx-auto px-6 py-5">
         <div className="flex items-center justify-between">
           {/* Enhanced Logo Section */}
-          <Link href="/" className="flex items-center space-x-3 group">
+          <Link href="/" className="flex items-center space-x-4 group">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative bg-gradient-to-r from-primary to-secondary p-2 rounded-full">
-                <ChefHat className="w-6 h-6 text-white" />
+              <div className="relative bg-gradient-to-r from-primary to-secondary p-3 rounded-full">
+                <ChefHat className="w-7 h-7 text-white" />
               </div>
             </div>
-            <div className="flex flex-col">
-              <div className="text-2xl font-black text-gray-900 leading-tight">
-                Tastes Like
-                <span className="text-primary ml-2">Home</span>
-              </div>
-              <span className="text-xs text-muted-foreground font-medium hidden sm:block">
-                Authentic Indian Home Cooking
-              </span>
+            <div className="text-3xl font-black text-gray-900 leading-tight">
+              Tastes Like
+              <span className="text-primary ml-2">Home</span>
             </div>
           </Link>
 
