@@ -16,9 +16,10 @@ export default function Header() {
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Tastes Like Home
-              </span>
+              <div className="text-2xl font-black text-gray-900 leading-tight">
+                Tastes Like
+                <span className="text-primary ml-2">Home</span>
+              </div>
               <span className="text-xs text-muted-foreground font-medium hidden sm:block">
                 Authentic Indian Home Cooking
               </span>
