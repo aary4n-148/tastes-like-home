@@ -105,50 +105,56 @@ export default async function HomePage() {
           </div>
           
           <div className="max-w-6xl mx-auto">
-            {/* Centered Hero Content */}
-            <div className="text-center mb-12">
-              {/* Premium Title */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[0.9] tracking-tight mb-8">
-                Tastes Like
-                <span className="block text-primary">Home</span>
-              </h1>
+            {/* Hero Content Grid - 2 Columns */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[400px]">
               
-              <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-medium max-w-3xl mx-auto mb-8">
-                Experience authentic Indian home cooking from{" "}
-                <span className="text-primary font-bold">London's verified chefs</span>
-              </p>
-              
-              {/* Trust Indicator - Centered */}
-              <div className="flex justify-center mb-12">
-                <div className="flex items-center gap-3 text-gray-700 bg-white/50 backdrop-blur-sm px-6 py-3 rounded-full border border-white/40">
-                  <div className="p-2 bg-accent/10 rounded-lg">
-                    <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+              {/* Main Content - Left Column */}
+              <div className="text-center lg:text-left space-y-8">
+                {/* Premium Title */}
+                <div>
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-[0.9] tracking-tight mb-6">
+                    Tastes Like
+                    <span className="block text-primary">Home</span>
+                  </h1>
+                  
+                  <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-medium">
+                    Experience authentic Indian home cooking from{" "}
+                    <span className="text-primary font-bold">London's verified chefs</span>
+                  </p>
+                </div>
+                
+                {/* Trust Indicator */}
+                <div className="flex justify-center lg:justify-start">
+                  <div className="flex items-center gap-3 text-gray-700 bg-white/50 backdrop-blur-sm px-6 py-3 rounded-full border border-white/40">
+                    <div className="p-2 bg-accent/10 rounded-lg">
+                      <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                    </div>
+                    <span className="font-semibold">Background Verified</span>
                   </div>
-                  <span className="font-semibold">Background Verified</span>
+                </div>
+              </div>
+              
+              {/* Stats - Right Column */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40">
+                  <div className="text-4xl font-black text-primary mb-2">{chefs.length}+</div>
+                  <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Verified Chefs</div>
+                </div>
+                <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40">
+                  <div className="text-4xl font-black text-secondary mb-2">5★</div>
+                  <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Average Rating</div>
+                </div>
+                <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40 col-span-2">
+                  <div className="text-3xl font-black text-accent mb-2">£13-20/hr</div>
+                  <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Affordable Home Cooking</div>
                 </div>
               </div>
             </div>
             
-            {/* Stats Grid - Full Width */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-              <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40">
-                <div className="text-4xl font-black text-primary mb-2">{chefs.length}+</div>
-                <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Verified Chefs</div>
-              </div>
-              <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40">
-                <div className="text-4xl font-black text-secondary mb-2">5★</div>
-                <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Average Rating</div>
-              </div>
-              <div className="text-center p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/40">
-                <div className="text-4xl font-black text-accent mb-2">£13-20</div>
-                <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Per Hour</div>
-              </div>
-            </div>
-            
             {/* Call to Action Arrow */}
-            <div className="text-center">
+            <div className="text-center mt-12">
               <ScrollToChefs targetId="chef-grid" />
             </div>
           </div>
