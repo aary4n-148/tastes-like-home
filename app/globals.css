@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Inter font for modern, professional typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
+  font-variant-numeric: tabular-nums;
 }
 
 @layer utilities {
