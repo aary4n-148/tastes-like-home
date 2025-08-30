@@ -15,9 +15,9 @@ export default function Header() {
                 <ChefHat className="w-7 h-7 text-white" />
               </div>
             </div>
-            <div className="text-3xl font-black text-gray-900 leading-tight">
-              Tastes Like
-              <span className="text-primary ml-2">Home</span>
+            <div className="text-2xl font-black text-gray-900 leading-tight">
+              <div>Tastes Like</div>
+              <div className="text-primary">Home</div>
             </div>
           </Link>
 
