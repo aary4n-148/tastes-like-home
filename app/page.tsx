@@ -118,13 +118,13 @@ export default async function HomePage() {
                     </h1>
                     
                     <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-medium max-w-2xl lg:max-w-none">
-                      Experience authentic Indian home cooking from 
+                      Experience authentic Indian home cooking from{" "}
                       <span className="text-primary font-bold">London's verified chefs</span>
                     </p>
                   </div>
                   
                   {/* Trust Indicators */}
-                  <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
+                  <div className="flex justify-center lg:justify-start">
                     <div className="flex items-center gap-3 text-gray-700">
                       <div className="p-2 bg-accent/10 rounded-lg">
                         <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,14 +132,6 @@ export default async function HomePage() {
                         </svg>
                       </div>
                       <span className="font-semibold">Background Verified</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-700">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                      </div>
-                      <span className="font-semibold">Same Day Booking</span>
                     </div>
                   </div>
                 </div>
@@ -166,18 +158,23 @@ export default async function HomePage() {
             
             {/* Call to Action Arrow */}
             <div className="text-center mt-16">
-              <p className="text-gray-500 mb-3 font-medium">Browse our amazing chefs</p>
-              <div className="w-10 h-10 mx-auto bg-primary/15 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-primary animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
-              </div>
+              <button 
+                onClick={() => document.getElementById('chef-grid')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group cursor-pointer"
+              >
+                <p className="text-gray-500 mb-3 font-medium group-hover:text-gray-700 transition-colors">Browse our amazing chefs</p>
+                <div className="w-10 h-10 mx-auto bg-primary/15 rounded-full flex items-center justify-center group-hover:bg-primary/25 transition-all duration-300">
+                  <svg className="w-5 h-5 text-primary animate-bounce group-hover:animate-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                  </svg>
+                </div>
+              </button>
             </div>
           </div>
         </section>
 
         {/* Chef Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div id="chef-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {chefs.length > 0 ? (
             chefs.map((chef) => (
               <ChefCard key={chef.id} chef={chef} />
