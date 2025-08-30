@@ -96,12 +96,12 @@ export default async function HomePage() {
       <Header />
 
       <main className="container mx-auto px-4 py-12">
-        {/* Premium Hero Section with Better Structure */}
-        <section className="relative py-20 mb-16">
-          {/* Subtle background enhancement */}
+        {/* Premium Hero Section with Distinct Background */}
+        <section className="relative py-20 mb-16 bg-gradient-to-br from-amber-100 via-orange-100 to-red-100 rounded-3xl mx-4 shadow-lg">
+          {/* Enhanced background elements */}
           <div className="absolute inset-0 -z-10">
-            <div className="absolute top-1/3 left-1/5 w-64 h-64 bg-primary/3 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/3 right-1/5 w-80 h-80 bg-secondary/3 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/4 left-1/6 w-80 h-80 bg-primary/8 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 right-1/6 w-96 h-96 bg-secondary/8 rounded-full blur-3xl"></div>
           </div>
           
           <div className="max-w-6xl mx-auto">
