@@ -126,7 +126,7 @@ export default async function ChefPage({ params }: ChefPageProps) {
   const images = [chef.photo, ...chef.foodPhotos]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/8 via-primary/4 to-background">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-red-50">
       <div className="container mx-auto px-4 py-6 lg:py-8">
         {/* Elegant Back Button */}
         <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8 group transition-all duration-200">
