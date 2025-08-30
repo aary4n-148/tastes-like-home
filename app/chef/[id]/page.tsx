@@ -126,16 +126,16 @@ export default async function ChefPage({ params }: ChefPageProps) {
   const images = [chef.photo, ...chef.foodPhotos]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-muted/50">
       <div className="container mx-auto px-4 py-6 lg:py-8">
         {/* Elegant Back Button */}
-        <Link href="/" className="inline-flex items-center text-slate-600 hover:text-slate-800 mb-8 group transition-all duration-200">
+        <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8 group transition-all duration-200">
           <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Back to all chefs</span>
         </Link>
 
         {/* Compact Hero Section */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 backdrop-blur-sm mb-8">
+        <div className="bg-card rounded-3xl shadow-xl overflow-hidden border border-border backdrop-blur-sm mb-8">
           <div className="lg:flex">
             {/* Carousel showing chef profile & food photos - Fixed height approach */}
             <div className="lg:w-2/5 relative">
@@ -143,7 +143,7 @@ export default async function ChefPage({ params }: ChefPageProps) {
                 <CarouselContent>
                   {images.map((src) => (
                     <CarouselItem key={src}>
-                      <div className="relative w-full h-64 md:h-80 lg:h-[500px] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                      <div className="relative w-full h-64 md:h-80 lg:h-[500px] overflow-hidden bg-gradient-to-br from-muted to-muted/70">
                       <Image
                         src={src}
                         alt={chef.name}
@@ -165,36 +165,36 @@ export default async function ChefPage({ params }: ChefPageProps) {
               {/* Name and Trust Badge */}
               <div className="flex items-start justify-between mb-6">
                 <div>
-                  <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-2">{chef.name}</h1>
+                  <h1 className="text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-2">{chef.name}</h1>
                 {chef.verified && (
                     <div className="flex items-center gap-2">
-                      <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 px-3 py-1.5 text-sm font-semibold">
+                                            <Badge className="bg-accent/10 text-accent border-accent/20 px-3 py-1.5 text-sm font-semibold">
                         <Shield className="w-4 h-4 mr-1.5" />
                         Verified Chef
-                  </Badge>
-                      <span className="text-sm text-slate-500">Background checked</span>
+                      </Badge>
+                      <span className="text-sm text-muted-foreground">Background checked</span>
                     </div>
                   )}
                 </div>
                 {/* Rating Badge - Top Right */}
                 {chef.avgRating && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2 text-center">
+                  <div className="bg-primary/10 border border-primary/20 rounded-2xl px-4 py-2 text-center">
                     <div className="flex items-center gap-1 justify-center mb-1">
-                      <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                      <span className="text-xl font-bold text-amber-700">{chef.avgRating.toFixed(1)}</span>
+                      <Star className="w-5 h-5 text-primary fill-primary" />
+                      <span className="text-xl font-bold text-primary">{chef.avgRating.toFixed(1)}</span>
                     </div>
-                    <span className="text-xs text-amber-600 font-medium">{chef.reviewCount} reviews</span>
+                    <span className="text-xs text-primary/80 font-medium">{chef.reviewCount} reviews</span>
                   </div>
                 )}
               </div>
 
               {/* Location & Travel - Compact */}
               {chef.location && (
-                <div className="flex items-center gap-3 mb-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <MapPin className="w-5 h-5 text-blue-600" />
+                <div className="flex items-center gap-3 mb-4 p-3 bg-muted rounded-xl border border-border">
+                  <MapPin className="w-5 h-5 text-primary" />
                   <div>
-                    <span className="font-semibold text-slate-700">{chef.location}</span>
-                    {chef.travelDistance && <span className="text-sm text-slate-500 ml-2">• Up to {chef.travelDistance} miles</span>}
+                    <span className="font-semibold text-foreground">{chef.location}</span>
+                    {chef.travelDistance && <span className="text-sm text-muted-foreground ml-2">• Up to {chef.travelDistance} miles</span>}
                   </div>
                 </div>
               )}
@@ -216,16 +216,16 @@ export default async function ChefPage({ params }: ChefPageProps) {
               {/* Pricing - Prominent in Hero */}
               <div className="mb-6 text-center">
                 <div className="flex items-baseline justify-center gap-2 mb-2">
-                  <span className="text-4xl font-black text-orange-600">£{chef.hourlyRate}</span>
-                  <span className="text-lg text-slate-600 font-medium">per hour</span>
+                  <span className="text-4xl font-black text-primary">£{chef.hourlyRate}</span>
+                  <span className="text-lg text-muted-foreground font-medium">per hour</span>
                 </div>
                 {chef.minimumBooking && (
-                  <p className="text-sm text-slate-500">Minimum {chef.minimumBooking} hours</p>
+                  <p className="text-sm text-muted-foreground">Minimum {chef.minimumBooking} hours</p>
                 )}
               </div>
 
               {/* Contact Button - Prominent */}
-              <Button asChild size="lg" className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] py-4 text-lg font-bold">
+              <Button asChild size="lg" className="w-full bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-accent-foreground shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] py-4 text-lg font-bold">
                 <a
                   href={whatsappUrl}
                   target="_blank"
@@ -244,64 +244,64 @@ export default async function ChefPage({ params }: ChefPageProps) {
         </div>
 
         {/* About Section - Full Width */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-slate-100">
+        <div className="bg-card rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-border">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6 text-center">About {chef.name.split(' ')[0]}</h2>
-            <p className="text-lg text-slate-700 leading-relaxed text-center whitespace-pre-line">{chef.bio}</p>
+            <h2 className="text-3xl font-bold text-foreground mb-6 text-center">About {chef.name.split(' ')[0]}</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed text-center whitespace-pre-line">{chef.bio}</p>
           </div>
         </div>
 
         {/* Quick Facts - Full Width Grid */}
         {(chef.experienceYears || chef.availability || chef.languagesSpoken || chef.frequencyPreference) && (
-          <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-slate-100">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center flex items-center justify-center gap-3">
-              <div className="w-2 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
+          <div className="bg-card rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-border">
+            <h2 className="text-3xl font-bold text-foreground mb-8 text-center flex items-center justify-center gap-3">
+              <div className="w-2 h-8 bg-gradient-to-b from-secondary to-accent rounded-full"></div>
               Quick Facts
-              <div className="w-2 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
+              <div className="w-2 h-8 bg-gradient-to-b from-secondary to-accent rounded-full"></div>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {chef.experienceYears && (
-                <div className="text-center bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-200 hover:shadow-lg transition-all duration-200">
+                <div className="text-center bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-200">
                   <div className="flex justify-center mb-4">
-                    <div className="p-4 bg-amber-100 rounded-2xl">
-                      <Star className="w-8 h-8 text-amber-600" />
+                    <div className="p-4 bg-primary/10 rounded-2xl">
+                      <Star className="w-8 h-8 text-primary" />
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-amber-700 uppercase tracking-wide mb-2">Experience</p>
-                  <p className="text-2xl font-bold text-amber-900">{chef.experienceYears} years</p>
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">Experience</p>
+                  <p className="text-2xl font-bold text-foreground">{chef.experienceYears} years</p>
                 </div>
               )}
               {chef.availability && (
-                <div className="text-center bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 hover:shadow-lg transition-all duration-200">
+                <div className="text-center bg-gradient-to-br from-secondary/5 to-secondary/10 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-200">
                   <div className="flex justify-center mb-4">
-                    <div className="p-4 bg-blue-100 rounded-2xl">
-                      <Clock className="w-8 h-8 text-blue-600" />
+                    <div className="p-4 bg-secondary/10 rounded-2xl">
+                      <Clock className="w-8 h-8 text-secondary" />
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-blue-700 uppercase tracking-wide mb-2">Available</p>
-                  <p className="text-sm font-semibold text-blue-900">{chef.availability}</p>
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">Available</p>
+                  <p className="text-sm font-semibold text-foreground">{chef.availability}</p>
                 </div>
               )}
               {chef.frequencyPreference && (
-                <div className="text-center bg-gradient-to-br from-emerald-50 to-green-50 p-6 rounded-2xl border border-emerald-200 hover:shadow-lg transition-all duration-200">
+                <div className="text-center bg-gradient-to-br from-accent/10 to-accent/5 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-200">
                   <div className="flex justify-center mb-4">
-                    <div className="p-4 bg-emerald-100 rounded-2xl">
-                      <Calendar className="w-8 h-8 text-emerald-600" />
+                    <div className="p-4 bg-accent/10 rounded-2xl">
+                      <Calendar className="w-8 h-8 text-accent" />
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-emerald-700 uppercase tracking-wide mb-2">Frequency</p>
-                  <p className="text-sm font-semibold text-emerald-900">{chef.frequencyPreference}</p>
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">Frequency</p>
+                  <p className="text-sm font-semibold text-foreground">{chef.frequencyPreference}</p>
                 </div>
               )}
               {chef.languagesSpoken && (
-                <div className="text-center bg-gradient-to-br from-purple-50 to-violet-50 p-6 rounded-2xl border border-purple-200 hover:shadow-lg transition-all duration-200">
+                <div className="text-center bg-gradient-to-br from-secondary/10 to-secondary/5 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-200">
                   <div className="flex justify-center mb-4">
-                    <div className="p-4 bg-purple-100 rounded-2xl">
-                      <Globe className="w-8 h-8 text-purple-600" />
+                    <div className="p-4 bg-secondary/10 rounded-2xl">
+                      <Globe className="w-8 h-8 text-secondary" />
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-purple-700 uppercase tracking-wide mb-2">Languages</p>
-                  <p className="text-sm font-semibold text-purple-900">{chef.languagesSpoken}</p>
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">Languages</p>
+                  <p className="text-sm font-semibold text-foreground">{chef.languagesSpoken}</p>
                 </div>
               )}
             </div>
@@ -310,49 +310,49 @@ export default async function ChefPage({ params }: ChefPageProps) {
 
         {/* Services & Specialties - Full Width */}
         {(chef.specialEvents || chef.houseHelpServices || chef.dietarySpecialties) && (
-          <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-slate-100">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center flex items-center justify-center gap-3">
-              <div className="w-2 h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
+          <div className="bg-card rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-border">
+            <h2 className="text-3xl font-bold text-foreground mb-8 text-center flex items-center justify-center gap-3">
+              <div className="w-2 h-8 bg-gradient-to-b from-primary to-secondary rounded-full"></div>
               Services & Specialties
-              <div className="w-2 h-8 bg-gradient-to-b from-orange-500 to-red-500 rounded-full"></div>
+              <div className="w-2 h-8 bg-gradient-to-b from-primary to-secondary rounded-full"></div>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {chef.specialEvents && (
-                <div className="group bg-gradient-to-r from-red-50 to-pink-50 p-6 rounded-2xl border border-red-200 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                <div className="group bg-gradient-to-r from-primary/5 to-primary/10 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                   <div className="text-center">
                     <div className="flex justify-center mb-4">
-                      <div className="p-4 bg-red-100 rounded-2xl group-hover:bg-red-200 transition-colors">
-                        <Utensils className="w-8 h-8 text-red-600" />
+                      <div className="p-4 bg-primary/10 rounded-2xl group-hover:bg-primary/15 transition-colors">
+                        <Utensils className="w-8 h-8 text-primary" />
                       </div>
                     </div>
-                    <h3 className="font-bold text-red-900 text-xl mb-3">Special Events</h3>
-                    <p className="text-red-700 leading-relaxed">{chef.specialEvents}</p>
+                    <h3 className="font-bold text-foreground text-xl mb-3">Special Events</h3>
+                    <p className="text-muted-foreground leading-relaxed">{chef.specialEvents}</p>
                   </div>
                 </div>
               )}
               {chef.houseHelpServices && (
-                <div className="group bg-gradient-to-r from-teal-50 to-cyan-50 p-6 rounded-2xl border border-teal-200 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                <div className="group bg-gradient-to-r from-secondary/5 to-secondary/10 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                   <div className="text-center">
                     <div className="flex justify-center mb-4">
-                      <div className="p-4 bg-teal-100 rounded-2xl group-hover:bg-teal-200 transition-colors">
-                        <Home className="w-8 h-8 text-teal-600" />
+                      <div className="p-4 bg-secondary/10 rounded-2xl group-hover:bg-secondary/15 transition-colors">
+                        <Home className="w-8 h-8 text-secondary" />
                       </div>
                     </div>
-                    <h3 className="font-bold text-teal-900 text-xl mb-3">House Help Services</h3>
-                    <p className="text-teal-700 leading-relaxed">{chef.houseHelpServices}</p>
+                    <h3 className="font-bold text-foreground text-xl mb-3">House Help Services</h3>
+                    <p className="text-muted-foreground leading-relaxed">{chef.houseHelpServices}</p>
                   </div>
                 </div>
               )}
               {chef.dietarySpecialties && (
-                <div className="group bg-gradient-to-r from-emerald-50 to-green-50 p-6 rounded-2xl border border-emerald-200 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                <div className="group bg-gradient-to-r from-accent/5 to-accent/10 p-6 rounded-2xl border border-border hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
                   <div className="text-center">
                     <div className="flex justify-center mb-4">
-                      <div className="p-4 bg-emerald-100 rounded-2xl group-hover:bg-emerald-200 transition-colors">
-                        <CheckCircle className="w-8 h-8 text-emerald-600" />
+                      <div className="p-4 bg-accent/10 rounded-2xl group-hover:bg-accent/15 transition-colors">
+                        <CheckCircle className="w-8 h-8 text-accent" />
                       </div>
                     </div>
-                    <h3 className="font-bold text-emerald-900 text-xl mb-3">Dietary Options</h3>
-                    <p className="text-emerald-700 leading-relaxed">{chef.dietarySpecialties}</p>
+                    <h3 className="font-bold text-foreground text-xl mb-3">Dietary Options</h3>
+                    <p className="text-muted-foreground leading-relaxed">{chef.dietarySpecialties}</p>
                   </div>
                 </div>
               )}
@@ -361,14 +361,14 @@ export default async function ChefPage({ params }: ChefPageProps) {
         )}
 
         {/* Reviews Section - Premium Design */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12 mt-12 border border-slate-100 backdrop-blur-sm">
+        <div className="bg-card rounded-3xl shadow-xl p-8 lg:p-12 mt-12 border border-border backdrop-blur-sm">
           <div className="text-center mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-3 flex items-center justify-center gap-3">
-              <div className="w-1 h-8 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3 flex items-center justify-center gap-3">
+              <div className="w-1 h-8 bg-gradient-to-b from-primary to-secondary rounded-full"></div>
               Customer Reviews
-              <div className="w-1 h-8 bg-gradient-to-b from-amber-500 to-orange-500 rounded-full"></div>
+              <div className="w-1 h-8 bg-gradient-to-b from-primary to-secondary rounded-full"></div>
             </h2>
-            <p className="text-slate-600 text-lg">See what others say about {chef.name.split(' ')[0]}'s cooking</p>
+            <p className="text-muted-foreground text-lg">See what others say about {chef.name.split(' ')[0]}'s cooking</p>
           </div>
           
           {/* Show rating summary if reviews exist */}
@@ -379,8 +379,8 @@ export default async function ChefPage({ params }: ChefPageProps) {
           )}
           
           {/* Review Form */}
-          <div className="mb-10 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200">
-            <h3 className="text-xl font-bold text-slate-900 mb-4 text-center">Share Your Experience</h3>
+          <div className="mb-10 bg-gradient-to-r from-muted to-muted/50 p-6 rounded-2xl border border-border">
+            <h3 className="text-xl font-bold text-foreground mb-4 text-center">Share Your Experience</h3>
             <ReviewForm chefId={chef.id} chefName={chef.name} />
           </div>
           
