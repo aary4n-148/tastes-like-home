@@ -95,22 +95,66 @@ export default async function HomePage() {
       <Header />
 
       <main className="container mx-auto px-4 py-12">
-        {/* Clean, Professional Hero Section */}
-        <div className="text-center mb-20 py-16">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-              Tastes Like Home
-            </h1>
-            
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Discover authentic Indian home-cooked meals from 
-              <span className="text-primary font-semibold"> verified chefs</span> in London
-            </p>
-            
-            <div className="pt-4">
-              <p className="text-sm text-muted-foreground/80 font-medium">
-                Fresh • Authentic • Made with Love
+        {/* Stunning Hero Section */}
+        <div className="relative mb-20 py-24 overflow-hidden">
+          {/* Subtle decorative elements */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute top-20 left-1/4 w-32 h-32 bg-primary/5 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-20 right-1/4 w-40 h-40 bg-secondary/5 rounded-full blur-3xl"></div>
+          </div>
+          
+          <div className="max-w-5xl mx-auto text-center">
+            {/* Premium Typography */}
+            <div className="mb-8">
+              <h1 className="text-6xl md:text-7xl font-black text-gray-900 mb-6 leading-[0.9] tracking-tight">
+                Tastes Like
+                <span className="block text-primary">Home</span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
+                Experience the warmth of authentic Indian home cooking from 
+                <span className="text-primary font-bold">London's finest chefs</span>
               </p>
+            </div>
+            
+            {/* Value Proposition */}
+            <div className="flex flex-wrap items-center justify-center gap-8 mb-12 text-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-accent/10 rounded-xl">
+                  <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <span className="font-semibold">Verified Chefs</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-xl">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <span className="font-semibold">Fresh Daily</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-secondary/10 rounded-xl">
+                  <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
+                </div>
+                <span className="font-semibold">Made with Love</span>
+              </div>
+            </div>
+            
+            {/* Call to Action */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="text-center">
+                <p className="text-sm text-gray-500 mb-2">Browse our chefs below</p>
+                <div className="w-8 h-8 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-primary animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </div>
