@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from "@/lib/supabase-server"
 import ChefCard from "@/components/chef-card"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import ScrollToChefs from "@/components/scroll-to-chefs"
 
 // Define the Chef type to match our existing components
 interface Chef {
@@ -158,14 +159,7 @@ export default async function HomePage() {
             
             {/* Call to Action Arrow */}
             <div className="text-center mt-16">
-              <div className="group">
-                <p className="text-gray-500 mb-3 font-medium">Browse our amazing chefs</p>
-                <div className="w-10 h-10 mx-auto bg-primary/15 rounded-full flex items-center justify-center">
-                  <svg className="w-5 h-5 text-primary animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                  </svg>
-                </div>
-              </div>
+              <ScrollToChefs targetId="chef-grid" />
             </div>
           </div>
         </section>
