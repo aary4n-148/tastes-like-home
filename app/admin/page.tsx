@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button"
 import { fetchAdminData } from "@/app/admin/actions"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Edit, ExternalLink } from "lucide-react"
+import { Edit, ExternalLink, LogOut, User } from "lucide-react"
+import { createSupabaseClient } from '@/lib/supabase-client'
+import { useRouter } from 'next/navigation'
 
 interface Chef {
   id: string
@@ -48,6 +50,8 @@ export default function AdminPage() {
   const [allApplications, setAllApplications] = useState<Application[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+  const router = useRouter()
 
   const fetchData = async () => {
     try {
@@ -85,7 +89,28 @@ export default function AdminPage() {
 
   useEffect(() => {
     fetchData()
+    
+    // Get user info for display
+    const getUserInfo = async () => {
+      const supabase = createSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user && user.email) {
+        setUserEmail(user.email)
+      }
+    }
+    getUserInfo()
   }, [])
+
+  const handleLogout = async () => {
+    const supabase = createSupabaseClient()
+    try {
+      await supabase.auth.signOut()
+      router.push('/admin/login')
+    } catch (error) {
+      console.error('Error signing out:', error)
+      router.push('/admin/login')
+    }
+  }
 
   if (isLoading) {
     return (
@@ -129,15 +154,38 @@ export default function AdminPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
-            <Link 
-              href="/" 
-              className="text-blue-600 hover:text-blue-700 underline"
-            >
-              ← Back to Website
-            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+              <p className="text-gray-600 mt-2">Manage chef applications, approvals, and reviews</p>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              {userEmail && (
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <User className="w-4 h-4" />
+                  <span>{userEmail}</span>
+                </div>
+              )}
+              
+              <Link 
+                href="/" 
+                className="text-blue-600 hover:text-blue-700 underline text-sm"
+                target="_blank"
+              >
+                View Website
+              </Link>
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleLogout}
+                className="flex items-center space-x-2"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </Button>
+            </div>
           </div>
-          <p className="text-gray-600 mt-2">Manage chef applications, approvals, and reviews</p>
         </div>
 
         {/* Statistics */}
