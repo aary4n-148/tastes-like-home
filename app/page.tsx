@@ -154,7 +154,7 @@ export default async function HomePage() {
             </div>
             
             {/* Call to Action Arrow */}
-            <div className="text-center mt-12">
+            <div className="text-center mt-6">
               <ScrollToChefs targetId="chef-grid" />
             </div>
           </div>
