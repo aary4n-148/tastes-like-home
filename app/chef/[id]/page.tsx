@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/carousel"
 import ReviewForm from "@/components/review-form"
 import ReviewList, { ReviewSummary } from "@/components/review-list"
+import ContactChefModal from "@/components/contact-chef-modal"
 
 interface ChefPageProps {
   params: Promise<{ id: string }>
@@ -120,8 +121,6 @@ export default async function ChefPage({ params }: ChefPageProps) {
 
   // Data successfully flowing through! 🎉
 
-  const whatsappUrl = `https://wa.me/${chef.phone.replace(/\D/g, "")}`
-
   // Build ordered list of images: profile photo first, then food photos
   const images = [chef.photo, ...chef.foodPhotos]
 
@@ -224,21 +223,24 @@ export default async function ChefPage({ params }: ChefPageProps) {
                 )}
               </div>
 
-              {/* Contact Button - Prominent */}
-              <Button asChild size="lg" className="w-full bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-accent-foreground shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] py-4 text-lg font-bold">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3"
-                >
-                  <MessageCircle className="w-6 h-6" />
-                  <span>Contact {chef.name.split(' ')[0]}</span>
-                  <div className="bg-white/20 rounded-full p-1">
-                    <ArrowLeft className="w-4 h-4 rotate-180" />
+              {/* Contact Button - Now opens modal */}
+              <ContactChefModal
+                chef={{
+                  id: chef.id,
+                  name: chef.name,
+                  phone: chef.phone
+                }}
+              >
+                <Button size="lg" className="w-full bg-gradient-to-r from-accent to-accent/80 hover:from-accent/90 hover:to-accent/70 text-accent-foreground shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] py-4 text-lg font-bold">
+                  <div className="flex items-center justify-center gap-3">
+                    <MessageCircle className="w-6 h-6" />
+                    <span>Contact {chef.name.split(' ')[0]}</span>
+                    <div className="bg-white/20 rounded-full p-1">
+                      <ArrowLeft className="w-4 h-4 rotate-180" />
+                    </div>
                   </div>
-                </a>
-              </Button>
+                </Button>
+              </ContactChefModal>
             </div>
           </div>
         </div>
