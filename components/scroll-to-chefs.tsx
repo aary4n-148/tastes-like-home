@@ -17,7 +17,7 @@ export default function ScrollToChefs({ targetId }: ScrollToChefsProps) {
       onClick={handleScroll}
       className="group cursor-pointer"
     >
-      <p className="text-gray-500 mb-3 font-medium group-hover:text-gray-700 transition-colors">
+      <p className="text-gray-500 mb-3 font-medium group-hover:text-gray-700 transition-colors text-sm sm:text-base">
         Browse our amazing chefs
       </p>
       <div className="w-10 h-10 mx-auto bg-primary/15 rounded-full flex items-center justify-center group-hover:bg-primary/25 transition-all duration-300">

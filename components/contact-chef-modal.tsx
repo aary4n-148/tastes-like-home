@@ -128,7 +128,7 @@ export default function ContactChefModal({ chef, children }: ContactChefModalPro
         {children}
       </DialogTrigger>
       
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto w-[calc(100%-2rem)] sm:w-full mx-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-green-600" />
@@ -155,7 +155,7 @@ export default function ContactChefModal({ chef, children }: ContactChefModalPro
         )}
 
         {!success && (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             {/* Email - Required */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
@@ -279,11 +279,11 @@ export default function ContactChefModal({ chef, children }: ContactChefModalPro
             />
 
             {/* Action Button */}
-            <div className="pt-4">
+            <div className="pt-2 sm:pt-4 space-y-2">
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-green-600 hover:bg-green-700 text-white"
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
               >
                 {isSubmitting ? (
                   'Submitting...'
@@ -294,11 +294,11 @@ export default function ContactChefModal({ chef, children }: ContactChefModalPro
                   </>
                 )}
               </Button>
+              
+              <p className="text-xs text-center text-gray-500">
+                We'll redirect you to WhatsApp after submitting this form
+              </p>
             </div>
-
-            <p className="text-xs text-center text-gray-500">
-              We'll redirect you to WhatsApp after submitting this form
-            </p>
           </form>
         )}
       </DialogContent>

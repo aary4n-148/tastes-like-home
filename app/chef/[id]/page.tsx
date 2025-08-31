@@ -165,19 +165,30 @@ export default async function ChefPage({ params }: ChefPageProps) {
               <div className="flex items-start justify-between mb-6">
                 <div>
                   <h1 className="text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-2">{chef.name}</h1>
-                {chef.verified && (
-                    <div className="flex items-center gap-2">
-                                            <Badge className="bg-accent/10 text-accent border-accent/20 px-3 py-1.5 text-sm font-semibold">
+                  {chef.verified && (
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge className="bg-accent/10 text-accent border-accent/20 px-3 py-1.5 text-sm font-semibold">
                         <Shield className="w-4 h-4 mr-1.5" />
                         Verified Chef
                       </Badge>
-                      <span className="text-sm text-muted-foreground">Background checked</span>
+                      {/* Rating Badge - Mobile Inline, Desktop Separate */}
+                      {chef.avgRating && (
+                        <div className="flex items-center gap-1 bg-primary/10 border border-primary/20 rounded-full px-3 py-1.5 lg:hidden">
+                          <Star className="w-4 h-4 text-primary fill-primary" />
+                          <span className="text-sm font-bold text-primary">{chef.avgRating.toFixed(1)}</span>
+                          <span className="text-xs text-primary/70">({chef.reviewCount})</span>
+                        </div>
+                      )}
+                      {/* Only show "Background checked" if no reviews - saves space when there's a rating */}
+                      {!chef.avgRating && (
+                        <span className="text-sm text-muted-foreground">Background checked</span>
+                      )}
                     </div>
                   )}
                 </div>
-                {/* Rating Badge - Top Right */}
+                {/* Rating Badge - Top Right on Desktop Only */}
                 {chef.avgRating && (
-                  <div className="bg-primary/10 border border-primary/20 rounded-2xl px-4 py-2 text-center">
+                  <div className="bg-primary/10 border border-primary/20 rounded-2xl px-4 py-2 text-center hidden lg:block">
                     <div className="flex items-center gap-1 justify-center mb-1">
                       <Star className="w-5 h-5 text-primary fill-primary" />
                       <span className="text-xl font-bold text-primary">{chef.avgRating.toFixed(1)}</span>
