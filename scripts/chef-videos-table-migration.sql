@@ -28,8 +28,12 @@ CREATE INDEX IF NOT EXISTS idx_chef_videos_chef_order ON chef_videos(chef_id, di
 ALTER TABLE chef_videos ENABLE ROW LEVEL SECURITY;
 
 -- Step 4: Create RLS policies (similar to food_photos)
+-- Drop policies if they exist, then recreate them
+DROP POLICY IF EXISTS "Anyone can view videos for verified chefs" ON chef_videos;
+DROP POLICY IF EXISTS "service_role_all_chef_videos" ON chef_videos;
+
 -- Public can view videos for verified chefs
-CREATE POLICY IF NOT EXISTS "Anyone can view videos for verified chefs" ON chef_videos 
+CREATE POLICY "Anyone can view videos for verified chefs" ON chef_videos 
 FOR SELECT USING (
   chef_id IN (
     SELECT id FROM chefs WHERE verified = true
@@ -37,7 +41,7 @@ FOR SELECT USING (
 );
 
 -- Service role has full access
-CREATE POLICY IF NOT EXISTS "service_role_all_chef_videos" ON chef_videos 
+CREATE POLICY "service_role_all_chef_videos" ON chef_videos 
 FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- Step 5: Add helpful comment
