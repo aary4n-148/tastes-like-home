@@ -28,7 +28,7 @@ interface Question {
   id: string
   text: string
   hint_text: string | null
-  field_type: 'text' | 'textarea' | 'email' | 'phone' | 'number' | 'photo'
+  field_type: 'text' | 'textarea' | 'email' | 'phone' | 'number' | 'photo' | 'video'
   is_required: boolean
   display_order: number
 }
@@ -44,9 +44,11 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
   const [uploadedFiles, setUploadedFiles] = useState<{
     profile_photos: FileUploadResult[]
     food_photos: FileUploadResult[]
+    introduction_videos: FileUploadResult[]
   }>({
     profile_photos: [],
-    food_photos: []
+    food_photos: [],
+    introduction_videos: []
   })
   const [applicationId] = useState(() => `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`)
 
@@ -235,6 +237,29 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
                 ...prev,
                 [fileType === 'profile' ? 'profile_photos' : 'food_photos']: [
                   ...prev[fileType === 'profile' ? 'profile_photos' : 'food_photos'],
+                  ...files
+                ]
+              }))
+            }}
+            onUploadError={(error) => {
+              setSubmitStatus({ type: 'error', message: error })
+            }}
+          />
+        )
+
+      case 'video':
+        return (
+          <FileUpload
+            fileType="video"
+            maxFiles={1}
+            applicationId={applicationId}
+            label={question.text}
+            helpText={question.hint_text || 'Upload a short video introducing yourself'}
+            onFilesUploaded={(files) => {
+              setUploadedFiles(prev => ({
+                ...prev,
+                introduction_videos: [
+                  ...prev.introduction_videos,
                   ...files
                 ]
               }))
