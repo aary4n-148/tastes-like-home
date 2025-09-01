@@ -362,6 +362,25 @@ export async function approveApplication(applicationId: string) {
       }
     }
 
+    // Add introduction videos from application
+    if (fileUploads.introduction_videos && fileUploads.introduction_videos.length > 0) {
+      const videoInserts = fileUploads.introduction_videos.map((video: any, index: number) => ({
+        chef_id: newChef.id,
+        video_url: video.fileUrl,
+        video_type: 'introduction',
+        display_order: index
+      }))
+
+      const { error: videoError } = await supabase
+        .from('chef_videos')
+        .insert(videoInserts)
+
+      if (videoError) {
+        console.error('Error adding introduction videos:', videoError)
+        // Continue anyway - chef is created
+      }
+    }
+
     // Update application status and link to chef
     const { error: updateError } = await supabase
       .from('chef_applications')

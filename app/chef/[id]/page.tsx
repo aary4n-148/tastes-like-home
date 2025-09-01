@@ -58,7 +58,8 @@ export default async function ChefPage({ params }: ChefPageProps) {
       house_help_services,
       dietary_specialties,
       chef_cuisines(cuisine),
-      food_photos(photo_url, display_order)
+      food_photos(photo_url, display_order),
+      chef_videos(video_url, video_type, display_order)
     `)
     .eq('id', id)
     .eq('verified', true) // Only show verified chefs
@@ -96,6 +97,10 @@ export default async function ChefPage({ params }: ChefPageProps) {
     foodPhotos: chefData.food_photos
       ?.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
       ?.map(p => p.photo_url) || [],
+    introductionVideos: chefData.chef_videos
+      ?.filter(v => v.video_type === 'introduction')
+      ?.sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+      ?.map(v => v.video_url) || [],
     cuisines: chefData.chef_cuisines?.map(c => c.cuisine) || [],
     hourlyRate: chefData.hourly_rate || 0,
     phone: chefData.phone || '',
@@ -365,6 +370,33 @@ export default async function ChefPage({ params }: ChefPageProps) {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Introduction Video Section */}
+        {chef.introductionVideos && chef.introductionVideos.length > 0 && (
+          <div className="bg-card rounded-3xl shadow-xl p-8 lg:p-12 mb-8 border border-border">
+            <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
+              Meet {chef.name.split(' ')[0]}
+            </h2>
+            <div className="max-w-4xl mx-auto">
+              {chef.introductionVideos.map((videoUrl, index) => (
+                <div key={index} className="aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
+                  <video
+                    src={videoUrl}
+                    controls
+                    className="w-full h-full object-cover"
+                    preload="metadata"
+                    poster={chef.photo} // Use chef photo as poster
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              ))}
+              <p className="text-center text-muted-foreground mt-4">
+                Get to know {chef.name.split(' ')[0]} and their cooking style
+              </p>
             </div>
           </div>
         )}
