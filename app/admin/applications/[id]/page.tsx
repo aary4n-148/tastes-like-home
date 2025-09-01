@@ -268,6 +268,38 @@ export default async function ApplicationReviewPage({ params }: ApplicationPageP
                     </div>
                   )}
                 </div>
+
+                {/* Introduction Videos */}
+                <div>
+                  <h3 className="text-lg font-medium text-gray-800 mb-3">Introduction Video</h3>
+                  {application.file_uploads?.introduction_videos && application.file_uploads.introduction_videos.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {application.file_uploads.introduction_videos.map((video: any, index: number) => (
+                        <div key={index} className="relative group">
+                          <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
+                            <video
+                              src={video.fileUrl}
+                              controls
+                              className="w-full h-full object-cover"
+                              preload="metadata"
+                            >
+                              Your browser does not support the video tag.
+                            </video>
+                          </div>
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-500 truncate" title={video.fileName}>
+                              {video.fileName?.split('/').pop() || 'Uploaded video'}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
+                      <p className="text-sm text-gray-500">No introduction video uploaded</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
