@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { X, Upload, Image, AlertCircle } from 'lucide-react'
+import { X, Upload, Image, AlertCircle, Video } from 'lucide-react'
 import { validateFile, uploadFile, type FileUploadResult } from '@/lib/storage'
 
 /**
@@ -19,7 +19,7 @@ import { validateFile, uploadFile, type FileUploadResult } from '@/lib/storage'
 
 interface FileUploadProps {
   /** Type of files being uploaded */
-  fileType: 'profile' | 'food'
+  fileType: 'profile' | 'food' | 'video'
   /** Maximum number of files allowed */
   maxFiles?: number
   /** Application ID for organizing uploads */
@@ -43,7 +43,7 @@ interface UploadingFile {
 
 export default function FileUpload({
   fileType,
-  maxFiles = fileType === 'profile' ? 1 : 5,
+  maxFiles = fileType === 'profile' ? 1 : fileType === 'video' ? 1 : 5,
   applicationId,
   onFilesUploaded,
   onUploadError,
@@ -70,7 +70,7 @@ export default function FileUpload({
     const validFiles: UploadingFile[] = []
     
     for (const file of fileArray) {
-      const validation = validateFile(file)
+      const validation = validateFile(file, fileType)
       if (!validation.isValid) {
         onUploadError?.(validation.error || 'File validation failed')
         continue
@@ -195,7 +195,11 @@ export default function FileUpload({
           onClick={() => fileInputRef.current?.click()}
         >
           <div className="p-6 text-center">
-            <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            {fileType === 'video' ? (
+              <Video className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            ) : (
+              <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            )}
             <div className="text-sm text-gray-600">
               <span className="font-medium text-blue-600 hover:text-blue-500">
                 Click to upload
@@ -203,10 +207,13 @@ export default function FileUpload({
               {' or drag and drop'}
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              PNG, JPG, WEBP up to 10MB each
+              {fileType === 'video' 
+                ? 'MP4, WebM up to 50MB' 
+                : 'PNG, JPG, WEBP up to 10MB each'
+              }
             </p>
             <p className="text-xs text-gray-500">
-              {maxFiles - successfulUploads.length} files remaining
+              {maxFiles - successfulUploads.length} {fileType === 'video' ? 'video' : 'files'} remaining
             </p>
           </div>
         </Card>
@@ -217,7 +224,7 @@ export default function FileUpload({
         ref={fileInputRef}
         type="file"
         multiple={maxFiles > 1}
-        accept="image/*"
+        accept={fileType === 'video' ? 'video/mp4,video/webm' : 'image/*'}
         onChange={handleInputChange}
         className="hidden"
       />
@@ -228,11 +235,20 @@ export default function FileUpload({
           {uploadingFiles.map((uploadingFile, index) => (
             <Card key={index} className="relative overflow-hidden">
               <div className="aspect-square relative">
-                <img
-                  src={uploadingFile.preview}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
+                {fileType === 'video' ? (
+                  <video
+                    src={uploadingFile.preview}
+                    className="w-full h-full object-cover"
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={uploadingFile.preview}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                )}
                 
                 {/* Status Overlay */}
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
