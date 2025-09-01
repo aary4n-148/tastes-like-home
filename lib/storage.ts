@@ -13,9 +13,12 @@ import { createSupabaseAdminClient } from './supabase-admin'
  */
 export const STORAGE_CONFIG = {
   BUCKET_NAME: 'chef-applications',
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB for images
+  MAX_VIDEO_SIZE: 50 * 1024 * 1024, // 50MB for videos
   ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
+  ALLOWED_VIDEO_TYPES: ['video/mp4', 'video/webm'],
   MAX_FILES_PER_APPLICATION: 10,
+  MAX_VIDEO_DURATION: 90, // seconds
 } as const
 
 /**
@@ -40,22 +43,33 @@ export interface FileValidation {
  * Validates a file before upload
  * 
  * @param file - File to validate
+ * @param fileType - Type of file being uploaded ('profile', 'food', 'video')
  * @returns Validation result with error message if invalid
  */
-export function validateFile(file: File): FileValidation {
-  // Check file size
-  if (file.size > STORAGE_CONFIG.MAX_FILE_SIZE) {
+export function validateFile(file: File, fileType?: 'profile' | 'food' | 'video'): FileValidation {
+  // Determine if this is a video file
+  const isVideo = fileType === 'video' || STORAGE_CONFIG.ALLOWED_VIDEO_TYPES.includes(file.type)
+  
+  // Check file size based on type
+  const maxSize = isVideo ? STORAGE_CONFIG.MAX_VIDEO_SIZE : STORAGE_CONFIG.MAX_FILE_SIZE
+  if (file.size > maxSize) {
+    const maxSizeMB = maxSize / 1024 / 1024
     return {
       isValid: false,
-      error: `File size must be less than ${STORAGE_CONFIG.MAX_FILE_SIZE / 1024 / 1024}MB`
+      error: `File size must be less than ${maxSizeMB}MB for ${isVideo ? 'videos' : 'images'}`
     }
   }
 
   // Check file type
-  if (!STORAGE_CONFIG.ALLOWED_TYPES.includes(file.type)) {
+  const allowedTypes = isVideo 
+    ? STORAGE_CONFIG.ALLOWED_VIDEO_TYPES 
+    : STORAGE_CONFIG.ALLOWED_TYPES
+    
+  if (!allowedTypes.includes(file.type)) {
+    const typeLabel = isVideo ? 'video' : 'image'
     return {
       isValid: false,
-      error: `File type must be one of: ${STORAGE_CONFIG.ALLOWED_TYPES.join(', ')}`
+      error: `${typeLabel} type must be one of: ${allowedTypes.join(', ')}`
     }
   }
 
@@ -73,7 +87,7 @@ export function validateFile(file: File): FileValidation {
 export function generateFileName(
   originalName: string, 
   applicationId: string, 
-  fileType: 'profile' | 'food'
+  fileType: 'profile' | 'food' | 'video'
 ): string {
   const timestamp = Date.now()
   const extension = originalName.split('.').pop()
@@ -95,11 +109,11 @@ export function generateFileName(
 export async function uploadFile(
   file: File,
   applicationId: string,
-  fileType: 'profile' | 'food'
+  fileType: 'profile' | 'food' | 'video'
 ): Promise<FileUploadResult> {
   try {
     // Validate file first
-    const validation = validateFile(file)
+    const validation = validateFile(file, fileType)
     if (!validation.isValid) {
       return {
         success: false,
