@@ -307,6 +307,7 @@ export async function approveApplication(applicationId: string) {
         photo_url: photoUrl, // Use uploaded profile photo
         verified: true, // Auto-approve when created from application
         // Enhanced fields from application
+        location_label: answers['Location/Area'],
         experience_years: answers['Experience Years'],
         availability: answers['Availability'],
         languages_spoken: answers['Languages Spoken'],

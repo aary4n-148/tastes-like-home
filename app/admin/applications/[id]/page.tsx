@@ -156,6 +156,12 @@ export default async function ApplicationReviewPage({ params }: ApplicationPageP
                   </p>
                 </div>
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Location/Area</label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {answers['Location/Area'] || 'Not specified'}
+                  </p>
+                </div>
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Travel Distance</label>
                   <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
                     {answers['Travel Distance'] ? `${answers['Travel Distance']} miles` : 'Not specified'}
