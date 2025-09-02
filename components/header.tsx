@@ -5,7 +5,7 @@ import { ChefHat } from "lucide-react"
 export default function Header() {
   return (
     <header className="bg-background/95 backdrop-blur-lg border-b border-border sticky top-0 z-50 shadow-lg shadow-primary/10">
-      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-5">
         <div className="flex items-center justify-between gap-4 sm:gap-8">
           {/* Enhanced Logo Section - Hide Icon on Mobile */}
           <Link href="/" className="flex items-center space-x-4 group">

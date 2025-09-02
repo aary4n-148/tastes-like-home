@@ -97,7 +97,7 @@ export default async function HomePage() {
 
       <main className="container mx-auto px-4 py-6 sm:py-12">
         {/* Premium Hero Section with Distinct Background - Mobile Optimized */}
-        <section className="relative py-6 sm:py-12 lg:py-16 mb-6 sm:mb-12 bg-gradient-to-br from-amber-100 via-orange-100 to-red-100 rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 shadow-lg">
+        <section className="relative py-6 sm:py-10 lg:py-12 mb-6 sm:mb-12 bg-gradient-to-br from-amber-100 via-orange-100 to-red-100 rounded-2xl sm:rounded-3xl mx-2 sm:mx-4 shadow-lg">
           {/* Enhanced background elements - Smaller on mobile */}
           <div className="absolute inset-0 -z-10">
             <div className="absolute top-1/4 left-1/6 w-32 h-32 sm:w-60 sm:h-60 lg:w-80 lg:h-80 bg-primary/8 rounded-full blur-3xl"></div>
@@ -106,18 +106,18 @@ export default async function HomePage() {
           
           <div className="max-w-6xl mx-auto px-3 sm:px-6">
             {/* Hero Content Grid - 2 Columns on Desktop, Mobile Optimized */}
-            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center min-h-[300px] sm:min-h-[400px]">
+            <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-center min-h-[300px] sm:min-h-[340px]">
               
               {/* Main Content - Left Column on Desktop */}
-              <div className="text-center lg:text-left space-y-3 sm:space-y-4 lg:space-y-8">
+              <div className="text-center lg:text-left space-y-3 sm:space-y-4 lg:space-y-6 pt-2">
                 {/* Premium Title - Bigger on Mobile */}
                 <div>
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-[0.95] sm:leading-[0.9] tracking-tight mb-3 sm:mb-4 lg:mb-6">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-[0.95] sm:leading-[0.9] tracking-tight mb-3 sm:mb-4 lg:mb-4">
                     Tastes Like
                     <span className="block text-primary">Home</span>
                   </h1>
                   
-                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 leading-relaxed font-medium px-2 sm:px-0">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-xl text-gray-600 leading-relaxed font-medium px-2 sm:px-0">
                     Experience authentic Indian home cooking from{" "}
                     <span className="text-primary font-bold">London's verified chefs</span>
                   </p>
@@ -160,8 +160,8 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Chef Grid - Fixed Spacing */}
-        <div id="chef-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 mt-4 sm:mt-8">
+        {/* Chef Grid - Balanced Layout */}
+        <div id="chef-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12 mt-8 sm:mt-12">
           {chefs.length > 0 ? (
             chefs.map((chef) => (
               <ChefCard key={chef.id} chef={chef} />
