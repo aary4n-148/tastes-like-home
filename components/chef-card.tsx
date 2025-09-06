@@ -56,14 +56,6 @@ export default function ChefCard({ chef }: ChefCardProps) {
           </div>
         )}
 
-        {/* Cuisines */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {chef.cuisines.map((cuisine) => (
-            <Badge key={cuisine} variant="secondary" className="text-xs px-2.5 py-1 bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100">
-              {cuisine}
-            </Badge>
-          ))}
-        </div>
 
         {/* Price */}
         <p className="text-base font-bold text-primary mb-4">From £{chef.hourlyRate} per hour</p>
