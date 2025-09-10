@@ -168,9 +168,8 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         return (
           <Textarea
             {...commonProps}
-            rows={4}
-            placeholder={question.hint_text || `Enter your ${question.text.toLowerCase()}`}
-            className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none"
+            rows={question.text === 'Bio/About You' ? 6 : 4}
+            className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base p-4 leading-relaxed"
           />
         )
       
