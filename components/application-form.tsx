@@ -109,7 +109,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="text"
             placeholder={placeholder}
-            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
+            className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
       
@@ -119,7 +119,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="email"
             placeholder={question.hint_text || 'your.email@example.com'}
-            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
+            className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
       
@@ -129,7 +129,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="tel"
             placeholder={question.hint_text || 'Your phone number'}
-            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
+            className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
       
@@ -157,7 +157,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             min={minValue}
             step={stepValue}
             placeholder={numPlaceholder}
-            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
+            className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
       
@@ -170,7 +170,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
                 {...commonProps}
                 rows={3}
                 placeholder="Example: Birthday parties, Wedding celebrations, Anniversary dinners, Family gatherings"
-                className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none"
+                className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base p-4 leading-relaxed"
               />
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <p className="text-sm text-blue-800">
@@ -188,7 +188,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
                 {...commonProps}
                 rows={3}
                 placeholder="Example: Kitchen cleaning, Grocery shopping, Basic meal prep, Dishwashing"
-                className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none"
+                className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base p-4 leading-relaxed"
               />
               <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                 <p className="text-sm text-green-800">
@@ -264,7 +264,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="text"
             placeholder={question.hint_text || `Enter your ${question.text.toLowerCase()}`}
-            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
+            className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
     }
@@ -290,9 +290,9 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
       {/* Dynamic Form Fields */}
       {questions.map((question) => (
         <div key={question.id} className="space-y-3">
-          <Label htmlFor={question.text} className="text-base font-semibold text-foreground flex items-center">
-            {question.text}
-            {question.is_required && <span className="text-destructive ml-2 text-lg">*</span>}
+          <Label htmlFor={question.text} className="text-sm sm:text-base font-semibold text-foreground flex items-center leading-relaxed">
+            <span className="break-words">{question.text}</span>
+            {question.is_required && <span className="text-destructive ml-2 text-lg flex-shrink-0">*</span>}
           </Label>
           
           <div className="relative">
@@ -300,10 +300,10 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
           </div>
           
           {question.hint_text && question.field_type !== 'photo' && (
-            <div className="bg-muted/50 rounded-lg p-3 border border-border/50">
-              <p className="text-sm text-muted-foreground flex items-start space-x-2">
-                <span className="text-primary mt-0.5">💡</span>
-                <span>{question.hint_text}</span>
+            <div className="bg-muted/50 rounded-lg p-3 sm:p-4 border border-border/50">
+              <p className="text-xs sm:text-sm text-muted-foreground flex items-start space-x-2 leading-relaxed">
+                <span className="text-primary mt-0.5 flex-shrink-0">💡</span>
+                <span className="break-words">{question.hint_text}</span>
               </p>
             </div>
           )}
@@ -324,7 +324,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 px-6 sm:px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-base sm:text-lg"
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center space-x-3">

@@ -26,7 +26,7 @@ export default async function ApplyPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-red-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         
         {/* Beautiful Header with Logo */}
         <div className="text-center mb-16">
@@ -49,17 +49,17 @@ export default async function ApplyPage() {
           </div>
           
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4 sm:mb-6 leading-tight">
             Become a Chef
           </h1>
           
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4">
             Want to cook for families? Join our team of great chefs! 
             We will look at your form in 2 days.
           </p>
           
           {/* Stats/Features Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto mb-12">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto mb-8 sm:mb-12">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-border/50">
               <div className="flex justify-center mb-4">
                 <div className="bg-primary/10 p-3 rounded-full">
@@ -145,10 +145,10 @@ export default async function ApplyPage() {
         </div>
 
         {/* Enhanced Application Form */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-border/50 p-8 sm:p-12">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-border/50 p-6 sm:p-8 lg:p-12">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">Chef Sign Up Form</h2>
-            <p className="text-muted-foreground">Please fill out all the boxes with a * to join our team.</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">Chef Sign Up Form</h2>
+            <p className="text-sm sm:text-base text-muted-foreground">Please fill out all the boxes with a * to join our team.</p>
           </div>
           <ApplicationForm questions={questions || []} />
         </div>
