@@ -50,12 +50,12 @@ export default async function ApplyPage() {
           
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight">
-            Apply to Become a Chef
+            Become a Chef
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-            Join our community of talented chefs and share your culinary skills with food lovers. 
-            We'll review your application within 48 hours.
+            Want to cook for families? Join our team of great chefs! 
+            We will look at your form in 2 days.
           </p>
           
           {/* Stats/Features Cards */}
@@ -66,8 +66,8 @@ export default async function ApplyPage() {
                   <Users className="w-6 h-6 text-primary" />
                 </div>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Join Our Community</h3>
-              <p className="text-sm text-muted-foreground">Connect with food lovers in your area</p>
+              <h3 className="font-semibold text-foreground mb-2">Join Our Team</h3>
+              <p className="text-sm text-muted-foreground">Cook for families near you</p>
             </div>
             
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-border/50">
@@ -76,8 +76,8 @@ export default async function ApplyPage() {
                   <Clock className="w-6 h-6 text-secondary" />
                 </div>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Quick Review</h3>
-              <p className="text-sm text-muted-foreground">48-hour application review process</p>
+              <h3 className="font-semibold text-foreground mb-2">Fast Review</h3>
+              <p className="text-sm text-muted-foreground">We check your form in 2 days</p>
             </div>
             
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-border/50">
@@ -86,8 +86,8 @@ export default async function ApplyPage() {
                   <Award className="w-6 h-6 text-accent" />
                 </div>
               </div>
-              <h3 className="font-semibold text-foreground mb-2">Professional Platform</h3>
-              <p className="text-sm text-muted-foreground">Showcase your culinary expertise</p>
+              <h3 className="font-semibold text-foreground mb-2">Great Platform</h3>
+              <p className="text-sm text-muted-foreground">Show off your cooking skills</p>
             </div>
           </div>
           
@@ -97,7 +97,7 @@ export default async function ApplyPage() {
               <div className="bg-primary/10 p-3 rounded-full mr-4">
                 <ChefHat className="w-6 h-6 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Why We Ask for This Information</h2>
+              <h2 className="text-2xl font-bold text-foreground">Why We Need This Info</h2>
             </div>
             <div className="grid md:grid-cols-2 gap-8 text-left">
               <div className="space-y-4">
@@ -106,8 +106,8 @@ export default async function ApplyPage() {
                     <span className="text-lg">📸</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Photos Build Trust</h3>
-                    <p className="text-muted-foreground">High-quality photos help customers choose you over other chefs. Show your personality and delicious creations!</p>
+                    <h3 className="font-semibold text-foreground mb-2">Photos Help People Pick You</h3>
+                    <p className="text-muted-foreground">Good photos help families choose you. Show your face and your yummy food!</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -115,8 +115,8 @@ export default async function ApplyPage() {
                     <span className="text-lg">📝</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Your Story Matters</h3>
-                    <p className="text-muted-foreground">Tell your culinary journey! Customers want to know your experience and what makes your cooking special.</p>
+                    <h3 className="font-semibold text-foreground mb-2">Tell Your Story</h3>
+                    <p className="text-muted-foreground">Tell us about your cooking! Families want to know why your food is special.</p>
                   </div>
                 </div>
               </div>
@@ -126,8 +126,8 @@ export default async function ApplyPage() {
                     <span className="text-lg">💰</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Fair Pricing</h3>
-                    <p className="text-muted-foreground">Set competitive rates that reflect your skills. Transparent pricing helps customers make informed decisions.</p>
+                    <h3 className="font-semibold text-foreground mb-2">Fair Prices</h3>
+                    <p className="text-muted-foreground">Set good prices for your cooking. Fair prices help families pick the right chef.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -135,8 +135,8 @@ export default async function ApplyPage() {
                     <span className="text-lg">⭐</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Professional Details</h3>
-                    <p className="text-muted-foreground">Share your experience, availability, and specialties to attract the right customers.</p>
+                    <h3 className="font-semibold text-foreground mb-2">Other Details</h3>
+                    <p className="text-muted-foreground">Tell us when you can cook and what food you make best.</p>
                   </div>
                 </div>
               </div>
@@ -147,8 +147,8 @@ export default async function ApplyPage() {
         {/* Enhanced Application Form */}
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-border/50 p-8 sm:p-12">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">Chef Application Form</h2>
-            <p className="text-muted-foreground">Please fill out all required fields to complete your application.</p>
+            <h2 className="text-2xl font-bold text-foreground mb-2">Chef Sign Up Form</h2>
+            <p className="text-muted-foreground">Please fill out all the boxes with a * to join our team.</p>
           </div>
           <ApplicationForm questions={questions || []} />
         </div>
@@ -157,11 +157,11 @@ export default async function ApplyPage() {
         <div className="text-center mt-12">
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-border/50">
             <p className="text-muted-foreground mb-2">
-              <strong>Privacy Protected:</strong> Your information is secure and will only be used for application review.
+              <strong>Your Info is Safe:</strong> We keep your information private and safe.
             </p>
             <p className="text-sm text-muted-foreground">
-              By submitting this application, you agree to our 
-              <a href="/terms" className="text-primary hover:text-primary/80 underline ml-1">terms of service</a>.
+              By sending this form, you agree to our 
+              <a href="/terms" className="text-primary hover:text-primary/80 underline ml-1">rules</a>.
             </p>
           </div>
         </div>

@@ -280,7 +280,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
               <span className="text-lg">⚠️</span>
             </div>
             <div>
-              <h3 className="font-semibold mb-1">Application Error</h3>
+              <h3 className="font-semibold mb-1">Form Error</h3>
               <p>{submitStatus.message}</p>
             </div>
           </div>
@@ -324,16 +324,16 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg"
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center space-x-3">
               <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-              <span>Submitting Application...</span>
+              <span>Sending Form...</span>
             </div>
           ) : (
             <div className="flex items-center justify-center space-x-3">
-              <span>Submit Application</span>
+              <span>Send Form</span>
               <span className="text-xl">🚀</span>
             </div>
           )}
@@ -345,10 +345,10 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         <div className="bg-accent/10 rounded-xl p-4 border border-accent/20">
           <div className="flex items-center justify-center space-x-2 mb-2">
             <span className="text-accent text-lg">⚡</span>
-            <p className="font-semibold text-accent">Quick Review Process</p>
+            <p className="font-semibold text-accent">Fast Review</p>
           </div>
           <p className="text-sm text-muted-foreground">
-            All required fields must be completed. We'll review your application within 48 hours and get back to you with next steps.
+            Fill out all boxes with a *. We will check your form in 2 days and tell you what happens next.
           </p>
         </div>
       </div>
