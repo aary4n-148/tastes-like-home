@@ -1658,7 +1658,7 @@ INSERT INTO chef_questions (text, hint_text, field_type, is_required, is_visible
 ('Bio/About You', 'Tell us about your cooking background, experience, and what makes your food special (minimum 50 words)', 'textarea', true, true, 4),
 ('Hourly Rate (£)', 'Your hourly rate in British pounds (e.g., 25 for £25/hour)', 'number', true, true, 5),
 ('Profile Photo', 'A clear photo of yourself for your chef profile (JPG, PNG, or WebP, max 3MB)', 'photo', true, true, 6),
-('Food Photos', 'Photos of your best dishes (optional, JPG/PNG/WebP, max 3MB each)', 'photo', false, true, 7),
+('Food Photos', 'Photos of your delicious dishes (optional, JPG/PNG/WebP, max 3MB each)', 'photo', false, true, 7),
 ('Cuisine Specialties', 'What types of cuisine do you specialize in? (e.g., Indian, Italian, Thai)', 'text', true, true, 8);
 ```
 
@@ -2107,7 +2107,7 @@ INSERT INTO chef_questions (text, hint_text, field_type, is_required, is_visible
 ('Bio/About You', 'Tell us about your cooking background, experience, and what makes your food special (minimum 50 words)', 'textarea', true, true, 4),
 ('Hourly Rate (£)', 'Your hourly rate in British pounds (e.g., 25 for £25/hour)', 'number', true, true, 5),
 ('Profile Photo', 'A clear photo of yourself for your chef profile (JPG, PNG, or WebP, max 3MB)', 'photo', true, true, 6),
-('Food Photos', 'Photos of your best dishes (optional, JPG/PNG/WebP, max 3MB each)', 'photo', false, true, 7),
+('Food Photos', 'Photos of your delicious dishes (optional, JPG/PNG/WebP, max 3MB each)', 'photo', false, true, 7),
 ('Cuisine Specialties', 'What types of cuisine do you specialize in? (e.g., Indian, Italian, Thai)', 'text', true, true, 8);
 ```
 

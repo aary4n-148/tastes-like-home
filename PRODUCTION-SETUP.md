@@ -61,7 +61,7 @@ REVIEW_TEST_MODE=false  # IMPORTANT: Set to false for production emails
 - Professional email notifications (4 types)
 - Admin review and approval workflow
 - Integrated header navigation
-- Best Dishes field with clear formatting guidance
+- Cuisine Specialties field for chef categorization
 
 ✅ **Email System Features**
 - Application confirmation emails
