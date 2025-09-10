@@ -92,23 +92,10 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
     switch (question.field_type) {
       case 'text':
         // Special handling for enhanced text fields with better placeholders
-        let placeholder = question.hint_text || `Enter your ${question.text.toLowerCase()}`
-        
-        if (question.text === 'Availability') {
-          placeholder = "Example: Monday-Friday evenings, Weekends all day"
-        } else if (question.text === 'Languages Spoken') {
-          placeholder = "Example: English, Hindi, Punjabi, Gujarati"
-        } else if (question.text === 'Frequency Preference') {
-          placeholder = "Example: Weekly bookings preferred, one-off events welcome"
-        } else if (question.text === 'Dietary Specialties') {
-          placeholder = "Example: Vegan, Jain, Gluten-free, Low-oil cooking"
-        }
-        
         return (
           <Input
             {...commonProps}
             type="text"
-            placeholder={placeholder}
             className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
@@ -118,7 +105,6 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
           <Input
             {...commonProps}
             type="email"
-            placeholder={question.hint_text || 'your.email@example.com'}
             className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
@@ -128,35 +114,17 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
           <Input
             {...commonProps}
             type="tel"
-            placeholder={question.hint_text || 'Your phone number'}
             className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
       
       case 'number':
-        // Special handling for enhanced number fields
-        let numPlaceholder = question.hint_text || 'Enter amount'
-        let minValue = "1"
-        let stepValue = "0.01"
-        
-        if (question.text === 'Experience Years') {
-          numPlaceholder = "Example: 5 (years of cooking experience)"
-          stepValue = "1"
-        } else if (question.text === 'Travel Distance') {
-          numPlaceholder = "Example: 10 (miles you're willing to travel)"
-          stepValue = "1"
-        } else if (question.text === 'Minimum Booking') {
-          numPlaceholder = "Example: 3 (minimum hours per booking)"
-          stepValue = "1"
-        }
-        
         return (
           <Input
             {...commonProps}
             type="number"
-            min={minValue}
-            step={stepValue}
-            placeholder={numPlaceholder}
+            min="1"
+            step={question.text.includes('Rate') ? "0.01" : "1"}
             className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )
@@ -169,7 +137,6 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
               <Textarea
                 {...commonProps}
                 rows={3}
-                placeholder="Example: Birthday parties, Wedding celebrations, Anniversary dinners, Family gatherings"
                 className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base p-4 leading-relaxed"
               />
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
@@ -187,7 +154,6 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
               <Textarea
                 {...commonProps}
                 rows={3}
-                placeholder="Example: Kitchen cleaning, Grocery shopping, Basic meal prep, Dishwashing"
                 className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base p-4 leading-relaxed"
               />
               <div className="bg-green-50 border border-green-200 rounded-lg p-3">
@@ -263,7 +229,6 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
           <Input
             {...commonProps}
             type="text"
-            placeholder={question.hint_text || `Enter your ${question.text.toLowerCase()}`}
             className="h-12 sm:h-14 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base px-4"
           />
         )

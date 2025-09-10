@@ -29,7 +29,7 @@ export default async function ApplyPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         
         {/* Beautiful Header with Logo */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-16">
           {/* Logo Section */}
           <div className="flex justify-center mb-8">
             <div className="relative group">
@@ -92,14 +92,14 @@ export default async function ApplyPage() {
           </div>
           
           {/* Enhanced Why Section */}
-          <div className="bg-white/90 backdrop-blur-sm border border-border/50 rounded-2xl p-8 shadow-xl">
+          <div className="bg-white/90 backdrop-blur-sm border border-border/50 rounded-2xl p-6 sm:p-8 shadow-xl max-w-3xl mx-auto">
             <div className="flex items-center justify-center mb-6">
               <div className="bg-primary/10 p-3 rounded-full mr-4">
                 <ChefHat className="w-6 h-6 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Why We Need This Info</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center">Why We Need This Info</h2>
             </div>
-            <div className="grid md:grid-cols-2 gap-8 text-left">
+            <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 text-left">
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="bg-primary/10 p-2 rounded-lg mt-1">
