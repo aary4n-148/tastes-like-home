@@ -53,8 +53,8 @@ export default async function ApplyPage() {
                 <p>Set a fair rate that reflects your skills. Customers often compare prices when choosing chefs.</p>
               </div>
               <div>
-                <h3 className="font-medium mb-2">🍛 Best dishes:</h3>
-                <p>List your signature dishes that customers love most. This helps them know what to expect!</p>
+                <h3 className="font-medium mb-2">🍽️ Cuisine specialties:</h3>
+                <p>Tell us what types of cuisine you specialize in. This helps customers find the perfect chef for their needs!</p>
               </div>
             </div>
           </div>

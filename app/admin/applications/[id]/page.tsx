@@ -123,15 +123,6 @@ export default async function ApplicationReviewPage({ params }: ApplicationPageP
               </div>
             </div>
 
-            {/* Best Dishes */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Best Dishes</h2>
-              <div className="bg-gray-50 p-4 rounded-md">
-                <p className="text-gray-900">
-                  {answers['Best Dishes'] || 'Not specified'}
-                </p>
-              </div>
-            </div>
 
             {/* Enhanced Chef Information */}
             <div className="bg-white rounded-lg shadow-sm p-6">
