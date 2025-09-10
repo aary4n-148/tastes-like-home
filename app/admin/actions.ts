@@ -264,7 +264,7 @@ export async function deleteReview(reviewId: string) {
  * Process:
  * 1. Validates application exists and is pending
  * 2. Creates chef record with verified=true
- * 3. Parses and inserts best dishes
+ * 3. Transfers photos and videos to chef profile
  * 4. Updates application status to approved
  * 5. Revalidates affected page caches
  */
@@ -326,24 +326,8 @@ export async function approveApplication(applicationId: string) {
       return { success: false, error: 'Failed to create chef profile' }
     }
 
-    // Add best dishes
-    if (answers['Best Dishes']) {
-      const cuisines = answers['Best Dishes'].split(',').map((c: string) => c.trim())
-      
-      const cuisineInserts = cuisines.map((cuisine: string) => ({
-        chef_id: newChef.id,
-        cuisine: cuisine
-      }))
-
-      const { error: cuisineError } = await supabase
-        .from('chef_cuisines')
-        .insert(cuisineInserts)
-
-      if (cuisineError) {
-        console.error('Error adding cuisines:', cuisineError)
-        // Continue anyway - chef is created
-      }
-    }
+    // Note: Cuisine specialties are now handled through the separate "Cuisine Specialties" field
+    // Best Dishes field has been removed as it was redundant and confusing
 
     // Add food photos from application
     if (fileUploads.food_photos && fileUploads.food_photos.length > 0) {
