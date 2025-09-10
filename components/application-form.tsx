@@ -109,6 +109,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="text"
             placeholder={placeholder}
+            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
           />
         )
       
@@ -118,6 +119,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="email"
             placeholder={question.hint_text || 'your.email@example.com'}
+            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
           />
         )
       
@@ -127,6 +129,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="tel"
             placeholder={question.hint_text || 'Your phone number'}
+            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
           />
         )
       
@@ -154,6 +157,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             min={minValue}
             step={stepValue}
             placeholder={numPlaceholder}
+            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
           />
         )
       
@@ -166,6 +170,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
                 {...commonProps}
                 rows={3}
                 placeholder="Example: Birthday parties, Wedding celebrations, Anniversary dinners, Family gatherings"
+                className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none"
               />
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                 <p className="text-sm text-blue-800">
@@ -183,6 +188,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
                 {...commonProps}
                 rows={3}
                 placeholder="Example: Kitchen cleaning, Grocery shopping, Basic meal prep, Dishwashing"
+                className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none"
               />
               <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                 <p className="text-sm text-green-800">
@@ -198,6 +204,7 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             rows={4}
             placeholder={question.hint_text || `Enter your ${question.text.toLowerCase()}`}
+            className="rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200 resize-none"
           />
         )
       
@@ -257,32 +264,48 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
             {...commonProps}
             type="text"
             placeholder={question.hint_text || `Enter your ${question.text.toLowerCase()}`}
+            className="h-12 rounded-xl border-border/50 bg-background/50 backdrop-blur-sm focus:bg-background focus:border-primary/50 focus:ring-primary/20 transition-all duration-200"
           />
         )
     }
   }
 
   return (
-    <form id="application-form" action={handleSubmit} className="space-y-6">
+    <form id="application-form" action={handleSubmit} className="space-y-8">
       {/* Error Messages */}
       {submitStatus && (
-        <div className="p-4 rounded-lg bg-red-50 text-red-800 border border-red-200">
-          {submitStatus.message}
+        <div className="p-6 rounded-xl bg-destructive/10 text-destructive border border-destructive/20 backdrop-blur-sm">
+          <div className="flex items-center space-x-3">
+            <div className="bg-destructive/20 p-2 rounded-full">
+              <span className="text-lg">⚠️</span>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-1">Application Error</h3>
+              <p>{submitStatus.message}</p>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Dynamic Form Fields */}
       {questions.map((question) => (
-        <div key={question.id} className="space-y-2">
-          <Label htmlFor={question.text} className="text-sm font-medium text-gray-700">
+        <div key={question.id} className="space-y-3">
+          <Label htmlFor={question.text} className="text-base font-semibold text-foreground flex items-center">
             {question.text}
-            {question.is_required && <span className="text-red-500 ml-1">*</span>}
+            {question.is_required && <span className="text-destructive ml-2 text-lg">*</span>}
           </Label>
           
-          {renderField(question)}
+          <div className="relative">
+            {renderField(question)}
+          </div>
           
           {question.hint_text && question.field_type !== 'photo' && (
-            <p className="text-xs text-gray-500">{question.hint_text}</p>
+            <div className="bg-muted/50 rounded-lg p-3 border border-border/50">
+              <p className="text-sm text-muted-foreground flex items-start space-x-2">
+                <span className="text-primary mt-0.5">💡</span>
+                <span>{question.hint_text}</span>
+              </p>
+            </div>
           )}
         </div>
       ))}
@@ -296,20 +319,38 @@ export default function ApplicationForm({ questions }: ApplicationFormProps) {
         autoComplete="off"
       />
 
-      {/* Submit Button */}
-      <div className="pt-4">
+      {/* Enhanced Submit Button */}
+      <div className="pt-8">
         <Button 
           type="submit" 
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+          className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-lg"
         >
-          {isSubmitting ? 'Submitting Application...' : 'Submit Application'}
+          {isSubmitting ? (
+            <div className="flex items-center justify-center space-x-3">
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+              <span>Submitting Application...</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center space-x-3">
+              <span>Submit Application</span>
+              <span className="text-xl">🚀</span>
+            </div>
+          )}
         </Button>
       </div>
 
-      {/* Footer Note */}
-      <div className="text-center text-sm text-gray-500 pt-2">
-        <p>All required fields must be completed. We'll review your application within 48 hours.</p>
+      {/* Enhanced Footer Note */}
+      <div className="text-center pt-4">
+        <div className="bg-accent/10 rounded-xl p-4 border border-accent/20">
+          <div className="flex items-center justify-center space-x-2 mb-2">
+            <span className="text-accent text-lg">⚡</span>
+            <p className="font-semibold text-accent">Quick Review Process</p>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            All required fields must be completed. We'll review your application within 48 hours and get back to you with next steps.
+          </p>
+        </div>
       </div>
     </form>
   )
