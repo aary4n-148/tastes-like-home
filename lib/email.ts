@@ -159,7 +159,7 @@ export async function sendApplicationApprovalEmail(
     const result = await resend.emails.send({
       from: 'Tastes Like Home <noreply@tastes-like-home.com>',
       to: email,
-      subject: 'Congratulations! Your Chef Application has been Approved 🎉',
+      subject: 'Congratulations! Your Chef Application has been Approved',
       html: createApprovalEmailHTML(chefName, profileUrl)
     })
     
@@ -296,7 +296,7 @@ function createApplicationConfirmationHTML(chefName: string, applicationId: stri
       </div>
 
       <div style="background: #f9fafb; padding: 30px; border-radius: 8px; border: 1px solid #e5e7eb;">
-        <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 24px;">Thanks ${chefName}! We're reviewing. 🍳</h2>
+        <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 24px;">Thanks ${chefName}! We're reviewing.</h2>
         
         <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
           We got your application! We will look at it in 2 days and email you back.
@@ -367,7 +367,7 @@ function createAdminAlertHTML(chefName: string, email: string, reviewUrl: string
       </div>
 
       <div style="background: #fef3c7; padding: 30px; border-radius: 8px; border: 1px solid #f59e0b;">
-        <h2 style="color: #92400e; margin: 0 0 20px 0; font-size: 24px;">🔔 New Chef Application Received</h2>
+        <h2 style="color: #92400e; margin: 0 0 20px 0; font-size: 24px;">New Chef Application Received</h2>
         
         <div style="background: #fff; padding: 20px; border-radius: 6px; margin: 20px 0;">
           <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">Application Details</h3>
@@ -427,7 +427,7 @@ function createApprovalEmailHTML(chefName: string, profileUrl: string): string {
       </div>
 
       <div style="background: #f0fdf4; padding: 30px; border-radius: 8px; border: 1px solid #22c55e;">
-        <h2 style="color: #15803d; margin: 0 0 20px 0; font-size: 24px;">🎉 Congrats ${chefName}! You're approved.</h2>
+        <h2 style="color: #15803d; margin: 0 0 20px 0; font-size: 24px;">Congrats ${chefName}! You're approved.</h2>
         
         <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
           Your profile is now live! Families can find you and book you for cooking.
