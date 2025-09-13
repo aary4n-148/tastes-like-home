@@ -277,6 +277,9 @@ function createVerificationEmailHTML(chefName: string, verificationUrl: string):
  * Create HTML template for application confirmation email
  */
 function createApplicationConfirmationHTML(chefName: string, applicationId: string): string {
+  const onboardingUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/onboarding`
+  const referUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/apply`
+  
   return `
     <!DOCTYPE html>
     <html>
@@ -293,20 +296,34 @@ function createApplicationConfirmationHTML(chefName: string, applicationId: stri
       </div>
 
       <div style="background: #f9fafb; padding: 30px; border-radius: 8px; border: 1px solid #e5e7eb;">
-        <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 24px;">Welcome to our chef community, ${chefName}! 🍳</h2>
+        <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 24px;">Thanks ${chefName}! We're reviewing. 🍳</h2>
         
         <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
-          Thank you for applying to join Tastes Like Home! We've received your application and are excited to review your culinary background and specialties.
+          We got your application! We will look at it in 2 days and email you back.
         </p>
 
         <div style="background: #fff; padding: 20px; border-radius: 6px; border: 1px solid #e5e7eb; margin: 20px 0;">
           <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">What happens next?</h3>
           <ul style="color: #374151; margin: 0; padding-left: 20px;">
-            <li style="margin-bottom: 8px;">Our team will review your application within 48 hours</li>
-            <li style="margin-bottom: 8px;">We'll assess your experience, specialties, and uploaded photos</li>
-            <li style="margin-bottom: 8px;">You'll receive an email with our decision and next steps</li>
-            <li style="margin-bottom: 0;">If approved, your profile will go live on our website</li>
+            <li style="margin-bottom: 8px;">We look at your photos and experience</li>
+            <li style="margin-bottom: 8px;">We email you our decision in 2 days</li>
+            <li style="margin-bottom: 0;">If yes, your profile goes live on our website</li>
           </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${onboardingUrl}" 
+             style="background: linear-gradient(to right, #ea580c, #dc2626); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin: 0 10px 10px 0;">
+            Get Ready - Chef Guide
+          </a>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${referUrl}" 
+             style="background: #f3f4f6; color: #374151; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 500; font-size: 14px; border: 1px solid #d1d5db; margin: 0 5px;">
+            Refer a Friend
+          </a>
         </div>
         
         <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 30px;">
@@ -314,7 +331,7 @@ function createApplicationConfirmationHTML(chefName: string, applicationId: stri
             <strong>Application ID:</strong> ${applicationId.substring(0, 8)}
           </p>
           <p style="color: #6b7280; font-size: 14px; margin: 0;">
-            We'll keep you updated on your application status.
+            We will email you when we have news.
           </p>
         </div>
       </div>
