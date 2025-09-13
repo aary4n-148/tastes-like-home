@@ -490,6 +490,9 @@ function createApprovalEmailHTML(chefName: string, profileUrl: string): string {
  * Create HTML template for rejection email
  */
 function createRejectionEmailHTML(chefName: string, reason?: string): string {
+  const onboardingUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/onboarding`
+  const reapplyUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/apply`
+  
   return `
     <!DOCTYPE html>
     <html>
@@ -506,36 +509,54 @@ function createRejectionEmailHTML(chefName: string, reason?: string): string {
       </div>
 
       <div style="background: #f9fafb; padding: 30px; border-radius: 8px; border: 1px solid #e5e7eb;">
-        <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 24px;">Thank you for your application, ${chefName}</h2>
+        <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 24px;">Thanks for applying, ${chefName}</h2>
         
         <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
-          Thank you for your interest in joining Tastes Like Home. After careful review, we're unable to approve your application at this time.
+          We looked at your application. We can't approve it right now, but you can try again later.
         </p>
 
         <div style="background: #fff; padding: 20px; border-radius: 6px; border: 1px solid #e5e7eb; margin: 20px 0;">
-          <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">How to improve your application</h3>
-          <p style="color: #374151; margin: 0 0 15px 0; font-size: 16px;">
-            To strengthen future applications, please consider:
-          </p>
+          <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">How to make your application better:</h3>
           <ul style="color: #374151; margin: 0; padding-left: 20px; font-size: 16px;">
-            <li style="margin-bottom: 8px;">Upload high-quality photos that showcase your cooking skills and food presentation</li>
-            <li style="margin-bottom: 8px;">Provide a detailed bio highlighting your culinary experience and specialties</li>
-            <li style="margin-bottom: 8px;">Ensure all information is complete and accurately represents your expertise</li>
-            <li style="margin-bottom: 0;">Include examples of dishes that demonstrate your unique cooking style</li>
+            <li style="margin-bottom: 8px;">Take better photos of your food - use good light</li>
+            <li style="margin-bottom: 8px;">Write more about your cooking experience</li>
+            <li style="margin-bottom: 8px;">Show different types of dishes you can cook</li>
+            <li style="margin-bottom: 0;">Fill out all the questions completely</li>
           </ul>
         </div>
 
+        <!-- Onboarding Guide CTA -->
         <div style="background: #eff6ff; padding: 20px; border-radius: 6px; border: 1px solid #3b82f6; margin: 20px 0;">
-          <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 18px;">We'd love to hear from you again!</h3>
-          <p style="color: #374151; margin: 0; font-size: 16px;">
-            Our chef community is always growing. Please feel free to reapply in the future as your experience develops. 
-            We appreciate your passion for home cooking and encourage you to keep sharing your culinary skills.
+          <h3 style="color: #1e40af; margin: 0 0 15px 0; font-size: 18px;">Learn what makes a great chef profile</h3>
+          <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
+            Read our chef guide to see what families look for. It has tips on photos, prices, and how to get bookings.
           </p>
+          
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="${onboardingUrl}" 
+               style="background: linear-gradient(to right, #3b82f6, #2563eb); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+              Read Chef Guide
+            </a>
+          </div>
+        </div>
+
+        <div style="background: #f0fdf4; padding: 20px; border-radius: 6px; border: 1px solid #22c55e; margin: 20px 0;">
+          <h3 style="color: #15803d; margin: 0 0 15px 0; font-size: 18px;">You can try again!</h3>
+          <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
+            We want more great chefs. Take some time to improve your application, then apply again. We'd love to have you cook with us.
+          </p>
+          
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="${reapplyUrl}" 
+               style="background: #f3f4f6; color: #374151; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 500; font-size: 14px; border: 1px solid #d1d5db;">
+              Apply Again Later
+            </a>
+          </div>
         </div>
         
         <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 30px;">
           <p style="color: #6b7280; font-size: 14px; margin: 0;">
-            Thank you for your interest in joining our chef community.
+            Thank you for wanting to join our chef community.
           </p>
         </div>
       </div>
