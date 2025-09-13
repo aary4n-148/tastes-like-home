@@ -408,13 +408,16 @@ function createAdminAlertHTML(chefName: string, email: string, reviewUrl: string
  * Create HTML template for approval email
  */
 function createApprovalEmailHTML(chefName: string, profileUrl: string): string {
+  const onboardingUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/onboarding`
+  const referUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/apply`
+  
   return `
     <!DOCTYPE html>
     <html>
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Application Approved!</title>
+      <title>You're Approved!</title>
     </head>
     <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
       
@@ -424,35 +427,50 @@ function createApprovalEmailHTML(chefName: string, profileUrl: string): string {
       </div>
 
       <div style="background: #f0fdf4; padding: 30px; border-radius: 8px; border: 1px solid #22c55e;">
-        <h2 style="color: #15803d; margin: 0 0 20px 0; font-size: 24px;">🎉 Congratulations ${chefName}!</h2>
+        <h2 style="color: #15803d; margin: 0 0 20px 0; font-size: 24px;">🎉 Congrats ${chefName}! You're approved.</h2>
         
         <p style="color: #374151; margin: 0 0 20px 0; font-size: 16px;">
-          We're thrilled to welcome you to the Tastes Like Home chef community! Your application has been approved and your profile is now live on our website.
+          Your profile is now live! Families can find you and book you for cooking.
         </p>
 
+        <!-- Quick Tips Section -->
         <div style="background: #fff; padding: 20px; border-radius: 6px; border: 1px solid #22c55e; margin: 20px 0;">
-          <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">What's next?</h3>
+          <h3 style="color: #111827; margin: 0 0 15px 0; font-size: 18px;">Quick tips to get your first booking:</h3>
           <ul style="color: #374151; margin: 0; padding-left: 20px;">
-            <li style="margin-bottom: 8px;">Your chef profile is now visible to customers</li>
-            <li style="margin-bottom: 8px;">Customers can contact you directly for bookings</li>
-            <li style="margin-bottom: 8px;">You'll start receiving booking inquiries via phone</li>
-            <li style="margin-bottom: 0;">Share your profile link with friends and family</li>
+            <li style="margin-bottom: 8px;"><strong>Reply fast</strong> - Answer messages in under 1 hour</li>
+            <li style="margin-bottom: 8px;"><strong>Be clear about price</strong> - £12-£20 per hour is normal</li>
+            <li style="margin-bottom: 8px;"><strong>Ask who buys food</strong> - You or them?</li>
+            <li style="margin-bottom: 8px;"><strong>Ask for reviews</strong> - After each job, ask nicely</li>
+            <li style="margin-bottom: 0;"><strong>Share your link</strong> - Put it on WhatsApp and Instagram</li>
           </ul>
         </div>
-        
+
+        <!-- Primary CTA Button -->
         <div style="text-align: center; margin: 30px 0;">
+          <a href="${onboardingUrl}" 
+             style="background: linear-gradient(to right, #ea580c, #dc2626); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            Chef Onboarding Guide
+          </a>
+        </div>
+
+        <!-- Secondary Action Buttons -->
+        <div style="text-align: center; margin: 20px 0; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
           <a href="${profileUrl}" 
-             style="background: linear-gradient(to right, #22c55e, #16a34a); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-            View Your Profile
+             style="background: #f3f4f6; color: #374151; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 500; font-size: 14px; border: 1px solid #d1d5db; margin: 5px;">
+            Share Your Profile
+          </a>
+          <a href="${referUrl}" 
+             style="background: #f3f4f6; color: #374151; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 500; font-size: 14px; border: 1px solid #d1d5db; margin: 5px;">
+            Refer a Friend
           </a>
         </div>
         
         <div style="border-top: 1px solid #22c55e; padding-top: 20px; margin-top: 30px;">
           <p style="color: #15803d; font-size: 14px; margin: 0 0 10px 0;">
-            <strong>Welcome to the team!</strong> We're excited to have you cooking with us.
+            <strong>Welcome to the team!</strong> Your cooking journey starts now.
           </p>
           <p style="color: #6b7280; font-size: 14px; margin: 0;">
-            Welcome to the Tastes Like Home chef community!
+            Check the guide above for everything you need to know.
           </p>
         </div>
       </div>
