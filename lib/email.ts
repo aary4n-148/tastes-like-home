@@ -314,7 +314,7 @@ function createApplicationConfirmationHTML(chefName: string, applicationId: stri
         <!-- Action Buttons -->
         <div style="text-align: center; margin: 30px 0;">
           <a href="${onboardingUrl}" 
-             style="background: linear-gradient(to right, #ea580c, #dc2626); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin: 0 10px 10px 0;">
+             style="background-color: #ea580c; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; border: none; margin: 0 10px 10px 0;">
             Get Ready - Chef Guide
           </a>
         </div>
@@ -448,7 +448,7 @@ function createApprovalEmailHTML(chefName: string, profileUrl: string): string {
         <!-- Primary CTA Button -->
         <div style="text-align: center; margin: 30px 0;">
           <a href="${onboardingUrl}" 
-             style="background: linear-gradient(to right, #ea580c, #dc2626); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+             style="background-color: #ea580c; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; border: none;">
             Chef Onboarding Guide
           </a>
         </div>
@@ -534,7 +534,7 @@ function createRejectionEmailHTML(chefName: string, reason?: string): string {
           
           <div style="text-align: center; margin: 20px 0;">
             <a href="${onboardingUrl}" 
-               style="background: linear-gradient(to right, #3b82f6, #2563eb); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+               style="background-color: #3b82f6; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; font-size: 16px; border: none;">
               Read Chef Guide
             </a>
           </div>
