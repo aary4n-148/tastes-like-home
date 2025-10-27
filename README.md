@@ -218,5 +218,4 @@ For questions or support, contact: [your-email@example.com]
 
 ---
 
-**Built with ❤️ for connecting families with authentic home cooking**
 
